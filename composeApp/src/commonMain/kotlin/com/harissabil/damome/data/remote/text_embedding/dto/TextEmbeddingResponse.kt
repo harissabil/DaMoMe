@@ -14,5 +14,5 @@ data class TextEmbeddingResponse(
 data class Embedding(
 
 	@SerialName("values")
-	val values: List<Double>
+	val values: FloatArray
 )

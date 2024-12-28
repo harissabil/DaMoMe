@@ -15,18 +15,40 @@ import damome.composeapp.generated.resources.pmedium_italic
 import damome.composeapp.generated.resources.pregular
 import damome.composeapp.generated.resources.psemibold
 import damome.composeapp.generated.resources.psemibold_italic
+import top.yukonga.miuix.kmp.theme.MiuixTheme
+import top.yukonga.miuix.kmp.theme.TextStyles
 
 @Composable
 fun Typography(): Typography {
     val poppins = FontFamily(
-        org.jetbrains.compose.resources.Font(Res.font.pregular, FontWeight.Normal, FontStyle.Normal),
+        org.jetbrains.compose.resources.Font(
+            Res.font.pregular,
+            FontWeight.Normal,
+            FontStyle.Normal
+        ),
         org.jetbrains.compose.resources.Font(Res.font.pitalic, FontWeight.Normal, FontStyle.Italic),
         org.jetbrains.compose.resources.Font(Res.font.pmedium, FontWeight.Medium, FontStyle.Normal),
-        org.jetbrains.compose.resources.Font(Res.font.pmedium_italic, FontWeight.Medium, FontStyle.Italic),
-        org.jetbrains.compose.resources.Font(Res.font.psemibold, FontWeight.SemiBold, FontStyle.Normal),
-        org.jetbrains.compose.resources.Font(Res.font.psemibold_italic, FontWeight.SemiBold, FontStyle.Italic),
+        org.jetbrains.compose.resources.Font(
+            Res.font.pmedium_italic,
+            FontWeight.Medium,
+            FontStyle.Italic
+        ),
+        org.jetbrains.compose.resources.Font(
+            Res.font.psemibold,
+            FontWeight.SemiBold,
+            FontStyle.Normal
+        ),
+        org.jetbrains.compose.resources.Font(
+            Res.font.psemibold_italic,
+            FontWeight.SemiBold,
+            FontStyle.Italic
+        ),
         org.jetbrains.compose.resources.Font(Res.font.pbold, FontWeight.Bold, FontStyle.Normal),
-        org.jetbrains.compose.resources.Font(Res.font.pbold_italic, FontWeight.Bold, FontStyle.Italic),
+        org.jetbrains.compose.resources.Font(
+            Res.font.pbold_italic,
+            FontWeight.Bold,
+            FontStyle.Italic
+        ),
         org.jetbrains.compose.resources.Font(Res.font.plight, FontWeight.Light, FontStyle.Normal),
     )
 
@@ -50,5 +72,57 @@ fun Typography(): Typography {
         labelLarge = Typography().labelLarge.copy(fontFamily = poppins),
         labelMedium = Typography().labelMedium.copy(fontFamily = poppins),
         labelSmall = Typography().labelSmall.copy(fontFamily = poppins)
+    )
+}
+
+@Composable
+fun MyTextStyles(): TextStyles {
+    val poppins = FontFamily(
+        org.jetbrains.compose.resources.Font(
+            Res.font.pregular,
+            FontWeight.Normal,
+            FontStyle.Normal
+        ),
+        org.jetbrains.compose.resources.Font(Res.font.pitalic, FontWeight.Normal, FontStyle.Italic),
+        org.jetbrains.compose.resources.Font(Res.font.pmedium, FontWeight.Medium, FontStyle.Normal),
+        org.jetbrains.compose.resources.Font(
+            Res.font.pmedium_italic,
+            FontWeight.Medium,
+            FontStyle.Italic
+        ),
+        org.jetbrains.compose.resources.Font(
+            Res.font.psemibold,
+            FontWeight.SemiBold,
+            FontStyle.Normal
+        ),
+        org.jetbrains.compose.resources.Font(
+            Res.font.psemibold_italic,
+            FontWeight.SemiBold,
+            FontStyle.Italic
+        ),
+        org.jetbrains.compose.resources.Font(Res.font.pbold, FontWeight.Bold, FontStyle.Normal),
+        org.jetbrains.compose.resources.Font(
+            Res.font.pbold_italic,
+            FontWeight.Bold,
+            FontStyle.Italic
+        ),
+        org.jetbrains.compose.resources.Font(Res.font.plight, FontWeight.Light, FontStyle.Normal),
+    )
+
+    return MiuixTheme.textStyles.copy(
+        main = MiuixTheme.textStyles.main.copy(fontFamily = poppins),
+        paragraph = MiuixTheme.textStyles.paragraph.copy(fontFamily = poppins),
+        body1 = MiuixTheme.textStyles.body1.copy(fontFamily = poppins),
+        body2 = MiuixTheme.textStyles.body2.copy(fontFamily = poppins),
+        button = MiuixTheme.textStyles.button.copy(fontFamily = poppins),
+        footnote1 = MiuixTheme.textStyles.footnote1.copy(fontFamily = poppins),
+        footnote2 = MiuixTheme.textStyles.footnote2.copy(fontFamily = poppins),
+        headline1 = MiuixTheme.textStyles.headline1.copy(fontFamily = poppins),
+        headline2 = MiuixTheme.textStyles.headline2.copy(fontFamily = poppins),
+        subtitle = MiuixTheme.textStyles.subtitle.copy(fontFamily = poppins),
+        title1 = MiuixTheme.textStyles.title1.copy(fontFamily = poppins),
+        title2 = MiuixTheme.textStyles.title2.copy(fontFamily = poppins),
+        title3 = MiuixTheme.textStyles.title3.copy(fontFamily = poppins),
+        title4 = MiuixTheme.textStyles.title4.copy(fontFamily = poppins),
     )
 }

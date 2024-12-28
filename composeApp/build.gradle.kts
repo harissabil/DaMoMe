@@ -9,8 +9,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.cocoapods)
-    id("io.objectbox")
     alias(libs.plugins.kotlin.serialization)
+    id("io.objectbox")
 }
 
 kotlin {
@@ -19,6 +19,13 @@ kotlin {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
+    }
+
+    if (gradle.startParameter.taskNames.contains("desktop:run")) {
+        println("Running without kapt")
+    } else {
+        println("Running with kapt for task ${gradle.startParameter.taskNames.firstOrNull()}")
+        apply(plugin = "kotlin-kapt")
     }
 
     listOf(
@@ -64,6 +71,10 @@ kotlin {
             // Koin
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+
+            // ObjectBox
+            configurations["kapt"].dependencies.add(project.dependencies.create("io.objectbox:objectbox-processor:4.0.3"))
+            implementation("io.objectbox:objectbox-kotlin:4.0.3")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -74,6 +85,9 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
+            // DateTime
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
 
             // ViewModel
             implementation(libs.lifecycle.viewmodel)
@@ -114,6 +128,9 @@ kotlin {
 
             // Ktor
             implementation(libs.ktor.client.okhttp)
+
+            // ObjectBox
+            implementation("io.objectbox:objectbox-kotlin:4.0.3")
         }
     }
 }

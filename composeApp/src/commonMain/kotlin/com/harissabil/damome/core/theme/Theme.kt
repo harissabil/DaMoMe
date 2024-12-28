@@ -1,8 +1,8 @@
 package com.harissabil.damome.core.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 import top.yukonga.miuix.kmp.theme.darkColorScheme
 import top.yukonga.miuix.kmp.theme.lightColorScheme
 
@@ -71,11 +71,9 @@ fun DaMoMeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-    val colorScheme = if (darkTheme) darkScheme else lightScheme
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography(),
+    MiuixTheme(
+        colors = if (darkTheme) darkColorScheme() else lightColorScheme(),
+        textStyles = MyTextStyles(),
         content = content
     )
 }
