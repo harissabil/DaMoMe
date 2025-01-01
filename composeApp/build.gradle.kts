@@ -10,23 +10,30 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.cocoapods)
     alias(libs.plugins.kotlin.serialization)
-    id("io.objectbox")
+//    id("io.objectbox")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_21)
         }
+
+        if (!gradle.startParameter.taskNames.any { it.contains("composeApp:run") }) {
+            apply(plugin = "kotlin-kapt")
+        }
+
+        dependencies {
+            debugImplementation("io.objectbox:objectbox-android-objectbrowser:4.0.3")
+        }
+        apply(plugin = "io.objectbox")
     }
 
-    if (gradle.startParameter.taskNames.contains("desktop:run")) {
-        println("Running without kapt")
-    } else {
-        println("Running with kapt for task ${gradle.startParameter.taskNames.firstOrNull()}")
-        apply(plugin = "kotlin-kapt")
-    }
+//    if (!gradle.startParameter.taskNames.any { it.contains("composeApp:run") }) {
+//
+//    }
 
     listOf(
         iosX64(),
@@ -65,6 +72,9 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
+            // Splash Screen
+            implementation("androidx.core:core-splashscreen:1.0.1")
+
             // Ktor
             implementation(libs.ktor.client.okhttp)
 
@@ -73,8 +83,13 @@ kotlin {
             implementation(libs.koin.androidx.compose)
 
             // ObjectBox
-            configurations["kapt"].dependencies.add(project.dependencies.create("io.objectbox:objectbox-processor:4.0.3"))
+            if (!gradle.startParameter.taskNames.any { it.contains("composeApp:run") }) {
+                configurations["kapt"].dependencies.add(project.dependencies.create("io.objectbox:objectbox-processor:4.0.3"))
+            }
             implementation("io.objectbox:objectbox-kotlin:4.0.3")
+
+            // Accompanist Permission
+            implementation("com.google.accompanist:accompanist-permissions:0.37.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -86,11 +101,14 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
+            // Icon Extended
+            implementation(compose.materialIconsExtended)
+
             // DateTime
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
 
             // ViewModel
-            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.viewmodel.compose)
 
             // Navigation
             implementation(libs.navigation.compose)
@@ -108,13 +126,29 @@ kotlin {
             // Google Generative AI SDK
             implementation(libs.generativeai.google)
 
-            // Ktor
+            // Ktor Client
             implementation(libs.bundles.ktor)
 
             // Koin
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+
+            // Constraint Layout
+            implementation("tech.annexflow.compose:constraintlayout-compose-multiplatform:0.4.0")
+
+            // Calendar
+            implementation("com.kizitonwose.calendar:compose-multiplatform:2.6.1")
+
+            // Date Time Picker
+            implementation("network.chaintech:kmp-date-time-picker:1.0.7")
+
+            // FileKit
+            implementation("io.github.vinceglb:filekit-compose:0.8.8")
+
+            // Room
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -123,14 +157,8 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
 
-            // ObjectBox JVM
-            implementation(libs.objectbox.java)
-
             // Ktor
             implementation(libs.ktor.client.okhttp)
-
-            // ObjectBox
-            implementation("io.objectbox:objectbox-kotlin:4.0.3")
         }
     }
 }
@@ -157,13 +185,23 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+    dependencies {
+        debugImplementation(compose.uiTooling)
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
-    debugImplementation(compose.uiTooling)
+    ksp(libs.room.compiler)
 }
 
 compose.desktop {

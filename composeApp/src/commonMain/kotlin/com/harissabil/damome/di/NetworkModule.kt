@@ -1,5 +1,6 @@
 package com.harissabil.damome.di
 
+import com.harissabil.damome.data.remote.gemini.GeminiClient
 import com.harissabil.damome.data.remote.text_embedding.api.TextEmbeddingClient
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -25,4 +26,5 @@ val httpClientModule = module {
         }
     }
     single { TextEmbeddingClient(get()) }
+    single { GeminiClient() }
 }

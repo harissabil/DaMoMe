@@ -12,6 +12,7 @@ data class ChatGroup(
 
 data class ChatMessage(
     val id: Long? = null,
+    var chatGroupId: Long,
     val isUser: Boolean,
     val order: Int,
     val message: String,
@@ -30,6 +31,7 @@ fun IChatGroupEntity.toChatGroup(): ChatGroup {
 fun IChatMessageEntity.toChatMessage(): ChatMessage {
     return ChatMessage(
         id = id,
+        chatGroupId = chatGroupId,
         isUser = isUser,
         order = order,
         message = message,

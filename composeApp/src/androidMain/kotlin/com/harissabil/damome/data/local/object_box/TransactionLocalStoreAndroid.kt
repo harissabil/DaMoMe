@@ -5,7 +5,9 @@ import io.objectbox.Property
 import io.objectbox.kotlin.toFlow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.atTime
@@ -15,29 +17,27 @@ import kotlin.reflect.KClass
 
 class TransactionLocalStoreAndroid<T : Any>(
     entityClass: KClass<T>,
+    private val typeProperty: Property<T>,
     private val timestampProperty: Property<T>,
     private val embeddingProperty: Property<T>,
 ) : TransactionLocalStore<T> {
     private val entityBox: Box<T> = ObjectBox.store.boxFor(entityClass.java)
 
-    override fun <E> put(entity: TransactionObject<E>) {
+    override suspend fun <E> put(entity: TransactionObject<E>) {
         val androidEntity = entity as TransactionObjectAndroid<T>
         entityBox.put(androidEntity.entity)
     }
 
-    override fun <E> delete(entity: TransactionObject<E>) {
+    override suspend fun <E> delete(entity: TransactionObject<E>) {
         val androidEntity = entity as TransactionObjectAndroid<T>
         entityBox.remove(androidEntity.entity)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun today(): Flow<List<T>> {
-        val now = Clock.System.now()
+    override fun findTransactionByDate(localDate: LocalDate): Flow<List<T>> {
         val tz = TimeZone.currentSystemDefault()
-        val today = now.toLocalDateTime(tz).date
-
-        val startInstant = today.atStartOfDayIn(tz)
-        val endInstant = today.atTime(23, 59, 59).toInstant(tz)
+        val startInstant = localDate.atStartOfDayIn(tz)
+        val endInstant = localDate.atTime(23, 59, 59).toInstant(tz)
 
         val query = entityBox.query(
             timestampProperty
@@ -49,11 +49,16 @@ class TransactionLocalStoreAndroid<T : Any>(
         return query.subscribe().toFlow()
     }
 
-    override fun all(): List<T> {
+    override suspend fun all(): List<T> {
         return entityBox.all
     }
 
-    override fun findNearestNeighbors(queryVector: FloatArray, neighbors: Int): List<T> {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun all(type: String): Flow<List<T>> {
+        return entityBox.query(typeProperty.equal(type)).build().subscribe().toFlow()
+    }
+
+    override suspend fun findNearestNeighbors(queryVector: FloatArray, neighbors: Int): List<T> {
         val query =
             entityBox.query(embeddingProperty.nearestNeighbors(queryVector, neighbors)).build()
         return query.find()

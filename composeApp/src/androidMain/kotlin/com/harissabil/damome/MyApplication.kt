@@ -3,6 +3,7 @@ package com.harissabil.damome
 import android.app.Application
 import com.harissabil.damome.data.local.object_box.ObjectBox
 import com.harissabil.damome.di.initKoin
+import io.github.vinceglb.filekit.core.FileKit
 import org.koin.android.ext.koin.androidContext
 
 class MyApplication : Application() {

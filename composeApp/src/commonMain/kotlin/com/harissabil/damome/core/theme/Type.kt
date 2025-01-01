@@ -109,7 +109,7 @@ fun MyTextStyles(): TextStyles {
         org.jetbrains.compose.resources.Font(Res.font.plight, FontWeight.Light, FontStyle.Normal),
     )
 
-    return MiuixTheme.textStyles.copy(
+    return TextStyles(
         main = MiuixTheme.textStyles.main.copy(fontFamily = poppins),
         paragraph = MiuixTheme.textStyles.paragraph.copy(fontFamily = poppins),
         body1 = MiuixTheme.textStyles.body1.copy(fontFamily = poppins),

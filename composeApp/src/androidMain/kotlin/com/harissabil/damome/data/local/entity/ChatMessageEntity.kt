@@ -13,6 +13,7 @@ import kotlinx.datetime.Instant
 data class ChatMessageEntity(
     @Id
     override var id: Long? = null,
+    override var chatGroupId: Long = 0L,
     override var isUser: Boolean = false,
     override var order: Int = 0,
     override var message: String = "",

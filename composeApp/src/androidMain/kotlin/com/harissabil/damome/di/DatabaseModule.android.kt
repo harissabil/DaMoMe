@@ -29,6 +29,7 @@ actual val databaseModule = module {
     single {
         TransactionLocalStoreAndroid(
             entityClass = TransactionEntity::class,
+            typeProperty = TransactionEntity_.type,
             timestampProperty = TransactionEntity_.timestamp,
             embeddingProperty = TransactionEntity_.embedding
         )
@@ -95,6 +96,7 @@ actual val databaseModule = module {
             ChatMessageObjectAndroid(
                 box = ChatMessageEntity(
                     id = chatMessage.id,
+                    chatGroupId = chatMessage.chatGroupId,
                     timestamp = chatMessage.timestamp,
                     isUser = chatMessage.isUser,
                     order = chatMessage.order,

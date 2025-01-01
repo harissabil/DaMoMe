@@ -21,25 +21,26 @@ class ChatLocalStoreAndroid(
     private val chatMessageEntityBox: Box<ChatMessageEntity> =
         ObjectBox.store.boxFor(chatMessageEntityClass.java)
 
-    override fun <E : IChatGroupEntity> putChatGroup(chatGroup: ChatGroupObject<E>): Long {
+    override suspend fun <E : IChatGroupEntity> putChatGroup(chatGroup: ChatGroupObject<E>): Long {
         val chatGroupEntity = chatGroup as ChatGroupObjectAndroid<ChatGroupEntity>
         return chatGroupEntityBox.put(chatGroupEntity.entity)
     }
 
-    override fun <V : IChatMessageEntity, X : ITransactionEntity> putChatMessageAndTransactionToChatGroup(
+    override suspend fun <V : IChatMessageEntity, X : ITransactionEntity> putChatMessageAndTransactionToChatGroup(
         chatGroupId: Long,
         chatMessages: ChatMessageObject<V>,
         transactions: List<TransactionObject<X>>,
     ) {
         val chatMessageEntity = chatMessages as ChatMessageObjectAndroid<ChatMessageEntity>
         val transactionEntity = transactions as List<TransactionObjectAndroid<TransactionEntity>>
+        chatMessageEntity.entity.chatGroupId = chatGroupId
         chatMessageEntity.entity.transactions.addAll(transactionEntity.map { it.entity })
         val chatGroupToInsert = chatGroupEntityBox.get(chatGroupId)
         chatGroupToInsert.chatMessages.add(chatMessageEntity.entity)
         chatGroupEntityBox.put(chatGroupToInsert)
     }
 
-    override fun <V : IChatMessageEntity> putChatMessageToChatGroup(
+    override suspend fun <V : IChatMessageEntity> putChatMessageToChatGroup(
         chatGroupId: Long,
         chatMessages: ChatMessageObject<V>,
     ) {
@@ -49,7 +50,7 @@ class ChatLocalStoreAndroid(
         chatGroupEntityBox.put(chatGroupToInsert)
     }
 
-    override fun <E : IChatGroupEntity, V : IChatMessageEntity> putChatGroupAndMessage(
+    override suspend fun <E : IChatGroupEntity, V : IChatMessageEntity> putChatGroupAndMessage(
         chatGroup: ChatGroupObject<E>,
         chatMessages: List<ChatMessageObject<V>>,
     ) {
@@ -61,7 +62,7 @@ class ChatLocalStoreAndroid(
         chatGroupEntityBox.put(chatGroupEntity.entity)
     }
 
-    override fun getTransactionByChatMessageId(chatMessageId: Long): List<TransactionEntity> {
+    override suspend fun getTransactionByChatMessageId(chatMessageId: Long): List<TransactionEntity> {
         return chatMessageEntityBox.get(chatMessageId).transactions
     }
 
@@ -71,11 +72,11 @@ class ChatLocalStoreAndroid(
         return query.subscribe().toFlow()
     }
 
-    override fun allChatMessage(chatGroupId: Long): List<ChatMessageEntity> {
+    override suspend fun allChatMessage(chatGroupId: Long): List<ChatMessageEntity> {
         return chatGroupEntityBox.get(chatGroupId).chatMessages
     }
 
-    override fun deleteChatGroupAndMessage(chatGroupId: Long) {
+    override suspend fun deleteChatGroupAndMessage(chatGroupId: Long) {
         val chatMessages = chatGroupEntityBox.get(chatGroupId).chatMessages
         chatMessages.forEach { message ->
             chatMessageEntityBox.remove(message)
