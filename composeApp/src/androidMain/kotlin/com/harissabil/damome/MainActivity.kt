@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import com.harissabil.damome.core.object_box.ObjectBoxBackup
+import com.harissabil.damome.data.local.object_box.ObjectBox
 import io.github.vinceglb.filekit.core.FileKit
 
 class MainActivity : ComponentActivity() {
@@ -49,10 +51,52 @@ class MainActivity : ComponentActivity() {
             else -> {}
         }
 
+        val backup = ObjectBoxBackup(this)
+
         setContent {
             CheckSystemTheme {
                 App(
-                    intentFilterByteArray = byteArray
+                    intentFilterByteArray = byteArray,
+                    onBackupClick = {
+                        backup
+                            .database(ObjectBox.store)
+                            .enableLogDebug(true)
+                            .backupLocation(ObjectBoxBackup.BACKUP_LOCATION_CUSTOM_DIALOG)
+                            .apply {
+                                onCompleteListener { success: Boolean, message: String ->
+                                    Log.d("Backup", "Backup success: $success\nmessage: $message")
+                                    if (success) {
+                                        restartApp(
+                                            Intent(
+                                                this@MainActivity,
+                                                MainActivity::class.java
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                            .backup()
+                    },
+                    onRestoreClick = {
+                        backup
+                            .database(ObjectBox.store)
+                            .enableLogDebug(true)
+                            .backupLocation(ObjectBoxBackup.BACKUP_LOCATION_CUSTOM_DIALOG)
+                            .apply {
+                                onCompleteListener { success: Boolean, message: String ->
+                                    Log.d("Restore", "Restore success: $success\nmessage: $message")
+                                    if (success) {
+                                        restartApp(
+                                            Intent(
+                                                this@MainActivity,
+                                                MainActivity::class.java
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                            .restore()
+                    }
                 )
             }
         }

@@ -10,7 +10,7 @@ interface TransactionLocalStore<T> {
 
     fun findTransactionByDate(localDate: LocalDate): Flow<List<T>>
 
-    suspend fun all(): List<T>
+    suspend fun all(): Flow<List<T>>
 
     fun all(type: String): Flow<List<T>>
 

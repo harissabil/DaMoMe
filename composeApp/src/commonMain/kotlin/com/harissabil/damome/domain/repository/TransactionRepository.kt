@@ -10,7 +10,7 @@ interface TransactionRepository {
     suspend fun updateTransaction(transaction: Transaction): Result<Unit>
     suspend fun deleteTransaction(transaction: Transaction)
     fun getPerDateTransactions(localDate: LocalDate): Flow<List<Transaction>>
-    suspend fun getAllTransactions(): List<Transaction>
+    suspend fun getAllTransactions(): Flow<List<Transaction>>
     fun getTotalBalance(): Flow<Double>
     fun getAllIncome(): Flow<List<Transaction>>
     fun getAllExpense(): Flow<List<Transaction>>

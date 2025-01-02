@@ -4,7 +4,6 @@ import com.harissabil.damome.data.local.entity.TransactionEntity
 import com.harissabil.damome.data.local.object_box.TransactionLocalStore
 import com.harissabil.damome.data.local.object_box.TransactionObject
 import com.harissabil.damome.data.local.room.TransactionDao
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -26,7 +25,6 @@ class TransactionLocalStoreDesktop(
         transactionDao.delete(androidEntity.entity)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun findTransactionByDate(localDate: LocalDate): Flow<List<TransactionEntity>> {
         val tz = TimeZone.currentSystemDefault()
         val startInstant = localDate.atStartOfDayIn(tz)
@@ -40,7 +38,7 @@ class TransactionLocalStoreDesktop(
         return query
     }
 
-    override suspend fun all(): List<TransactionEntity> {
+    override suspend fun all(): Flow<List<TransactionEntity>> {
         return transactionDao.all()
     }
 

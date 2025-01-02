@@ -83,7 +83,7 @@ fun OnboardingScreen(
             ) {
                 OnboardingCard(
                     title = "Welcome to DaMoMe",
-                    description = "DaMoMe is a simple and easy to use income/expense tracker app that powered by Kotlin Multiplatform and AI technology.",
+                    description = "DaMoMe is a simple and easy-to-use income/expense tracker app powered by Kotlin Multiplatform and AI technology.",
                 )
 
                 Column(

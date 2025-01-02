@@ -1,6 +1,7 @@
 package com.harissabil.damome.ui.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -27,22 +29,21 @@ fun CustomSnackbar(
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     Snackbar(
-        modifier = modifier.padding(MaterialTheme.spacing.medium).border(
-            1.dp,
-            MiuixTheme.colorScheme.outline,
-            RoundedCornerShape(16.dp)
-        ),
-        containerColor = MiuixTheme.colorScheme.surface,
-        shape = RoundedCornerShape(16.dp),
+        modifier = modifier.padding(MaterialTheme.spacing.medium)
+            .border(1.dp, MiuixTheme.colorScheme.outline, shape = RoundedCornerShape(8.dp))
+            .shadow(3.dp, shape = RoundedCornerShape(8.dp)),
+        containerColor = MiuixTheme.colorScheme.surfaceContainer,
+        contentColor = MiuixTheme.colorScheme.onSurfaceContainer,
+        shape = RoundedCornerShape(8.dp),
     ) {
         CompositionLocalProvider(
             LocalLayoutDirection provides
                     if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
         ) {
-            Row(
-                modifier = Modifier.padding(vertical = MaterialTheme.spacing.small),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 //                Icon(
 //                    imageVector = MiuixIcons.Info,
 //                    tint = when (type) {
@@ -57,7 +58,8 @@ fun CustomSnackbar(
 //                    contentDescription = null
 //                )
 //                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
-                Text(message)
+                    Text(text = message)
+                }
             }
         }
     }

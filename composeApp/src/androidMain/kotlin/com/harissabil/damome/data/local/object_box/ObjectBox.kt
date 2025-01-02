@@ -14,6 +14,7 @@ object ObjectBox {
     fun init(context: Context) {
         store = MyObjectBox.builder()
             .androidContext(context)
+            .name("damome_db")
             .build()
         if (BuildConfig.DEBUG) {
             val started = Admin(store).start(context)

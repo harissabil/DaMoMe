@@ -29,6 +29,7 @@ class GeminiClient {
                         - "family"
                         - "foods"
                         - "health"
+                        - "income"
                         - "savings"
                         - "shopping"
                         - "events"

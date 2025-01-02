@@ -43,8 +43,8 @@ class TransactionRepositoryImpl(
             .map { it.map(ITransactionEntity::toTransaction) }
     }
 
-    override suspend fun getAllTransactions(): List<Transaction> {
-        return transactionLocalStore.all().map(ITransactionEntity::toTransaction)
+    override suspend fun getAllTransactions(): Flow<List<Transaction>> {
+        return transactionLocalStore.all().map { it.map(ITransactionEntity::toTransaction) }
     }
 
     override fun getTotalBalance(): Flow<Double> {

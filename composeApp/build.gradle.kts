@@ -90,6 +90,12 @@ kotlin {
 
             // Accompanist Permission
             implementation("com.google.accompanist:accompanist-permissions:0.37.0")
+
+            // Apache I/O
+            implementation("commons-io:commons-io:2.18.0")
+
+            //Material Design Implementation
+            implementation("com.google.android.material:material:1.12.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -172,7 +178,7 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "1.0.0-beta1"
     }
     packaging {
         resources {

@@ -16,6 +16,8 @@ import top.yukonga.miuix.kmp.basic.Surface
 @Preview
 fun App(
     intentFilterByteArray: ByteArray? = null,
+    onBackupClick: () -> Unit = {},
+    onRestoreClick: () -> Unit = {},
 ) {
     KoinContext {
         DaMoMeTheme {
@@ -27,6 +29,8 @@ fun App(
                 NavGraph(
                     startDestination = viewModel.startRoute,
                     intentFilterByteArray = intentFilterByteArray,
+                    onBackupClick = onBackupClick,
+                    onRestoreClick = onRestoreClick,
                 )
             }
         }

@@ -47,8 +47,10 @@ import com.harissabil.damome.ui.components.AddTransactionBottomSheet
 import com.harissabil.damome.ui.components.HomeFab
 import com.harissabil.damome.ui.components.speeddial_by_leinardi.SpeedDialOverlay
 import com.harissabil.damome.ui.components.speeddial_by_leinardi.SpeedDialState
+import com.harissabil.damome.ui.screen.ask_ai.AskAiScreen
 import com.harissabil.damome.ui.screen.home.HomeScreen
 import com.harissabil.damome.ui.screen.home.HomeViewModel
+import com.harissabil.damome.ui.screen.more.MoreScreen
 import com.harissabil.damome.ui.screen.onboarding.OnboardingScreen
 import com.harissabil.damome.ui.screen.records.RecordsScreen
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
@@ -76,6 +78,8 @@ fun NavGraph(
     modifier: Modifier = Modifier,
     startDestination: Route,
     intentFilterByteArray: ByteArray? = null,
+    onBackupClick: () -> Unit,
+    onRestoreClick: () -> Unit,
 ) {
     val routes = listOf(
         Route.Onboarding,
@@ -303,9 +307,7 @@ fun NavGraph(
             }
 
             composable<Route.AskAi> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Ask AI")
-                }
+                AskAiScreen()
             }
 
             composable<Route.DaMommy> {
@@ -315,9 +317,10 @@ fun NavGraph(
             }
 
             composable<Route.More> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "More")
-                }
+                MoreScreen(
+                    onBackupClick = onBackupClick,
+                    onRestoreClick = onRestoreClick,
+                )
             }
         }
 

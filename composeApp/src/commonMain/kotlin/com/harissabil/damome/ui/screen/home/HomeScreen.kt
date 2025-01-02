@@ -71,6 +71,10 @@ fun HomeScreen(
     val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
     val perDateTransactions by viewModel.perDateTransactions.collectAsStateWithLifecycle()
 
+    val perDateTransactionsSorted by remember(key1 = perDateTransactions) {
+        mutableStateOf(perDateTransactions.sortedBy { it.timestamp })
+    }
+
     val transactionToSubmitState by viewModel.transactionToSubmitState.collectAsStateWithLifecycle()
 
     val addTransactionBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -132,9 +136,9 @@ fun HomeScreen(
                 selection = selectedDate,
                 onDateClick = viewModel::onDateSelected
             )
-            if (perDateTransactions.isNotEmpty()) {
+            if (perDateTransactionsSorted.isNotEmpty()) {
                 Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
-                perDateTransactions.forEach { transaction: Transaction ->
+                perDateTransactionsSorted.forEach { transaction: Transaction ->
                     TransactionDayItem(
                         modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
                         transaction = transaction,
@@ -144,7 +148,7 @@ fun HomeScreen(
                         },
                         onDeleteClick = viewModel::deleteTransaction
                     )
-                    if (perDateTransactions.last() == transaction) {
+                    if (perDateTransactionsSorted.last() == transaction) {
                         Spacer(modifier = Modifier.height(81.dp))
                     } else {
                         Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))

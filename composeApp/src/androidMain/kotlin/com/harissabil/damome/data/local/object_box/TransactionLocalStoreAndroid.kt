@@ -49,8 +49,9 @@ class TransactionLocalStoreAndroid<T : Any>(
         return query.subscribe().toFlow()
     }
 
-    override suspend fun all(): List<T> {
-        return entityBox.all
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun all(): Flow<List<T>> {
+        return entityBox.query().build().subscribe().toFlow()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

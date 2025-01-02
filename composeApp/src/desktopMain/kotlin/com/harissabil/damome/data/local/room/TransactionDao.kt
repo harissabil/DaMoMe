@@ -34,7 +34,7 @@ interface TransactionDao {
 
     // Get all transactions
     @Query("SELECT * FROM TransactionEntity")
-    suspend fun all(): List<TransactionEntity>
+    fun all(): Flow<List<TransactionEntity>>
 
     // Get all transactions of a specific type
     @Query("SELECT * FROM TransactionEntity WHERE type = :type")
