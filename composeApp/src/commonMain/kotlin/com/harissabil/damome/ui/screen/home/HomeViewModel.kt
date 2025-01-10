@@ -3,6 +3,9 @@ package com.harissabil.damome.ui.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.harissabil.damome.core.utils.Result
+import com.harissabil.damome.core.utils.formatToTextToEmbed
+import com.harissabil.damome.core.utils.parseFormattedAmount
+import com.harissabil.damome.domain.model.Category
 import com.harissabil.damome.domain.model.Transaction
 import com.harissabil.damome.domain.model.TransactionType
 import com.harissabil.damome.domain.repository.CurrencyRepository
@@ -168,9 +171,9 @@ class HomeViewModel(
     }
 
     // Below is for the transaction to submit state methods
-
     fun onAmoutChanged(amount: String) {
-        _transactionToSubmitState.update { it.copy(amount = amount.toDoubleOrNull()) }
+        val parsedAmount = parseFormattedAmount(amount, _state.value.currency)
+        _transactionToSubmitState.update { it.copy(amount = parsedAmount) }
     }
 
     fun onDateAndTimeChanged(dateTime: LocalDateTime) {
@@ -193,9 +196,20 @@ class HomeViewModel(
         _transactionToSubmitState.update { it.copy(isLoading = true) }
 
         val description = _transactionToSubmitState.value.description
+        val textToEmbed = description?.let {
+            formatToTextToEmbed(
+                transactionType = _transactionToSubmitState.value.type,
+                amount = _transactionToSubmitState.value.amount!!,
+                category = Category.entries.find { it.value == _transactionToSubmitState.value.category }!!,
+                currency = _state.value.currency,
+                description = it
+            )
+        }
+
         val embedding = if (isTextEmbeddingNeeded()) {
-            if (description != null) {
-                when (val result = textEmbeddingRepository.getEmbedding(description)) {
+            if (description != null && textToEmbed != null) {
+                println("Text to embed: $textToEmbed")
+                when (val result = textEmbeddingRepository.getEmbedding(textToEmbed)) {
                     is Result.Error -> {
                         _messageFlow.emit(result.message)
                         _transactionToSubmitState.update { it.copy(isLoading = false) }
@@ -209,13 +223,13 @@ class HomeViewModel(
 
         val transaction = Transaction(
             id = null,
-            type = _transactionToSubmitState.value.type ?: TransactionType.INCOME,
+            type = _transactionToSubmitState.value.type,
             timestamp = _transactionToSubmitState.value.timestamp,
             currency = _state.value.currency,
             amount = _transactionToSubmitState.value.amount ?: 0.0,
             category = _transactionToSubmitState.value.category ?: "bills",
             description = description,
-            textToEmbed = description,
+            textToEmbed = textToEmbed,
             embedding = embedding
         )
 
@@ -265,10 +279,20 @@ class HomeViewModel(
         val description = _transactionToSubmitState.value.description
         val textToEmbed = _transactionToSubmitState.value.textToEmbed
 
-        val embedding = if (description != textToEmbed) {
+        val textToEmbedAgain = description?.let {
+            formatToTextToEmbed(
+                transactionType = _transactionToSubmitState.value.type,
+                amount = _transactionToSubmitState.value.amount!!,
+                category = Category.entries.find { it.value == _transactionToSubmitState.value.category }!!,
+                currency = _state.value.currency,
+                description = it
+            )
+        }
+
+        val embedding = if (textToEmbed != textToEmbedAgain) {
             if (isTextEmbeddingNeeded()) {
-                if (description != null) {
-                    when (val result = textEmbeddingRepository.getEmbedding(description)) {
+                if (description != null && textToEmbedAgain != null) {
+                    when (val result = textEmbeddingRepository.getEmbedding(textToEmbedAgain)) {
                         is Result.Error -> {
                             _messageFlow.emit(result.message)
                             _transactionToSubmitState.update { it.copy(isLoading = false) }
@@ -283,13 +307,13 @@ class HomeViewModel(
 
         val transactionToUpdate = Transaction(
             id = _transactionToSubmitState.value.transactionToEdit?.id,
-            type = _transactionToSubmitState.value.type ?: TransactionType.INCOME,
+            type = _transactionToSubmitState.value.type,
             timestamp = _transactionToSubmitState.value.timestamp,
             currency = _transactionToSubmitState.value.currency ?: _state.value.currency,
             amount = _transactionToSubmitState.value.amount ?: 0.0,
             category = _transactionToSubmitState.value.category ?: "bills",
             description = _transactionToSubmitState.value.description,
-            textToEmbed = _transactionToSubmitState.value.description,
+            textToEmbed = textToEmbedAgain,
             embedding = embedding
         )
 
@@ -332,6 +356,7 @@ class HomeViewModel(
             }
 
             is Result.Success -> {
+                println("Success: ${result.data}")
                 _transactionToSubmitState.update {
                     it.copy(
                         amount = result.data.amount,
@@ -341,8 +366,11 @@ class HomeViewModel(
                             ?: Clock.System.now(),
                         category = result.data.category,
                         description = result.data.description,
-                        type = TransactionType.entries.find { it.value == result.data.type },
-                        isLoading = false
+                        type = TransactionType.entries.find { it.value == result.data.type }
+                            ?: TransactionType.INCOME,
+                        isLoading = false,
+
+                        scannedAmount = result.data.amount,
                     )
                 }
             }

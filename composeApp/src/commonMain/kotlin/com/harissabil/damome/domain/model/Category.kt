@@ -3,13 +3,12 @@ package com.harissabil.damome.domain.model
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.More
 import androidx.compose.material.icons.filled.AccountBalanceWallet
-import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Celebration
+import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.FamilyRestroom
 import androidx.compose.material.icons.filled.MedicalServices
 import androidx.compose.material.icons.filled.MonetizationOn
-import androidx.compose.material.icons.filled.MoneyOffCsred
 import androidx.compose.material.icons.filled.Paid
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Restaurant
@@ -35,6 +34,12 @@ enum class Category(
     INCOME("income", "Income", Icons.Filled.MonetizationOn, Color(0xFF41B3A2)),
     SAVINGS("savings", "Savings", Icons.Filled.Savings, Color(0xFF87bc45)),
     SHOPPING("shopping", "Shopping", Icons.Filled.ShoppingCart, Color(0xFFede15b)),
+    TRANSPORTATION(
+        "transportation",
+        "Transportation",
+        Icons.Filled.DirectionsCar,
+        Color(0xFFbfbfbf)
+    ),
     EVENTS("events", "Events", Icons.Filled.Event, Color(0xFF0bb4ff)),
     TOP_UP("top_up", "Top up", Icons.Filled.AccountBalanceWallet, Color(0xFF8be04e)),
     OTHERS("others", "Others", Icons.AutoMirrored.Filled.More, Color(0xFFe14b31));

@@ -29,7 +29,7 @@ data class HomeState(
 data class TransactionToSubmitState(
     val transactionToEdit: Transaction? = null,
     val id: Long? = null,
-    val type: TransactionType? = TransactionType.INCOME,
+    val type: TransactionType = TransactionType.INCOME,
     val timestamp: Instant = Clock.System.now(),
     val amount: Double? = 0.0,
     val currency: String? = null,
@@ -39,4 +39,6 @@ data class TransactionToSubmitState(
     val isLoading: Boolean = false,
     val isFailed: Boolean = false,
     val isSavedSuccess: Boolean = false,
+
+    val scannedAmount: Double? = null,
 )

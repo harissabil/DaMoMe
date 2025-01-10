@@ -38,7 +38,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.harissabil.damome.core.theme.spacing
 import com.harissabil.damome.core.utils.toMonthAndYear
 import com.harissabil.damome.domain.model.Category
-import com.harissabil.damome.domain.model.TransactionType
 import com.harissabil.damome.ui.components.AddTransactionBottomSheet
 import com.harissabil.damome.ui.components.BaseTopAppBar
 import com.harissabil.damome.ui.components.CustomSnackbarHost
@@ -192,6 +191,7 @@ fun RecordsScreen(modifier: Modifier = Modifier) {
                 currency = transactionToSubmitState.currency
                     ?: viewModel.currency.collectAsState().value,
                 amount = transactionToSubmitState.amount ?: 0.0,
+                scannedAmount = null,
                 onAmountChange = viewModel::onAmoutChanged,
                 dateAndTime = transactionToSubmitState.timestamp.toLocalDateTime(TimeZone.currentSystemDefault()),
                 onDateAndTimeChange = viewModel::onDateAndTimeChanged,
@@ -201,7 +201,7 @@ fun RecordsScreen(modifier: Modifier = Modifier) {
                 onCategoryChange = viewModel::onCategoryChanged,
                 description = transactionToSubmitState.description,
                 onDescriptionChange = viewModel::onDescriptionChanged,
-                transactionType = transactionToSubmitState.type ?: TransactionType.INCOME,
+                transactionType = transactionToSubmitState.type,
                 onTransactionTypeChange = viewModel::onTransactionTypeChanged,
                 isLoading = transactionToSubmitState.isLoading,
                 submitText = if (transactionToSubmitState.transactionToEdit != null) "Update" else "Save",

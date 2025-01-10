@@ -49,7 +49,7 @@ fun OnboardingScreen(
     val viewModel: OnboardingViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val currencies = listOf("IDR", "VND", "JPY", "KRW")
+    val currencies = listOf("IDR", "USD", "EUR", "JPY", "KRW", "CNY", "SGD", "VND", "DKK")
 
     val snackbarHostState = remember { SnackbarHostState() }
 

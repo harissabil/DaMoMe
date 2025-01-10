@@ -56,22 +56,22 @@ fun IncomeExpenseWithFilter(
     totalExpenseYearly: Double,
 ) {
     val incomeMap = mapOf(
-        "All Time" to totalIncome,
         "Daily" to totalIncomeDaily,
         "Weekly" to totalIncomeWeekly,
         "Monthly" to totalIncomeMonthly,
         "Yearly" to totalIncomeYearly,
+        "All Time" to totalIncome,
     )
 
     val expenseMap = mapOf(
-        "All Time" to totalExpense,
         "Daily" to totalExpenseDaily,
         "Weekly" to totalExpenseWeekly,
         "Monthly" to totalExpenseMonthly,
         "Yearly" to totalExpenseYearly,
+        "All Time" to totalExpense,
     )
 
-    var selected by rememberSaveable { mutableStateOf("All Time") }
+    var selected by rememberSaveable { mutableStateOf("Daily") }
 
     Column(
         modifier = modifier.fillMaxWidth()

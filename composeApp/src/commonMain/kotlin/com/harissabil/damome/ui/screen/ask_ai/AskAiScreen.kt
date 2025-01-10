@@ -1,5 +1,8 @@
 package com.harissabil.damome.ui.screen.ask_ai
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,8 +40,13 @@ import top.yukonga.miuix.kmp.basic.Scaffold
 import top.yukonga.miuix.kmp.basic.Text
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun AskAiScreen(modifier: Modifier = Modifier) {
+fun SharedTransitionScope.AskAiScreen(
+    modifier: Modifier = Modifier,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onFabClick: () -> Unit,
+) {
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
@@ -47,10 +55,13 @@ fun AskAiScreen(modifier: Modifier = Modifier) {
         topBar = { BaseTopAppBar(title = "Ask AI") },
         floatingActionButton = {
             FloatingActionButton(
-                modifier = Modifier.padding(MaterialTheme.spacing.small),
+                modifier = Modifier.padding(MaterialTheme.spacing.small).sharedBounds(
+                    sharedContentState = rememberSharedContentState("DamommyScreen"),
+                    animatedVisibilityScope = animatedVisibilityScope
+                ),
                 containerColor = MiuixTheme.colorScheme.primary,
                 shape = FloatingActionButtonDefaults.shape,
-                onClick = { /* TODO */ }
+                onClick = {}
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Chat,
@@ -87,7 +98,7 @@ fun AskAiScreen(modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                 Text(
                     modifier = Modifier.alpha(0.5f),
-                    text = "An AI that can help you manage your finances by analyzing your transaction data and providing insights based on it.",
+                    text = aiDescription(),
                     style = MiuixTheme.textStyles.subtitle,
                     textAlign = TextAlign.Center,
                 )
@@ -95,3 +106,6 @@ fun AskAiScreen(modifier: Modifier = Modifier) {
         }
     }
 }
+
+// the RAG is only for android currently, desktop soon after fixing the objectbox issue on desktop
+expect fun aiDescription(): String

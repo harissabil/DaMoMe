@@ -189,6 +189,7 @@ fun HomeScreen(
                 sheetState = addTransactionBottomSheetState,
                 currency = transactionToSubmitState.currency ?: state.currency,
                 amount = transactionToSubmitState.amount ?: 0.0,
+                scannedAmount = transactionToSubmitState.scannedAmount,
                 onAmountChange = viewModel::onAmoutChanged,
                 dateAndTime = transactionToSubmitState.timestamp.toLocalDateTime(TimeZone.currentSystemDefault()),
                 onDateAndTimeChange = viewModel::onDateAndTimeChanged,

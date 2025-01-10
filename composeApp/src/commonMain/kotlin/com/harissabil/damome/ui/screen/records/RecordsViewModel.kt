@@ -3,6 +3,9 @@ package com.harissabil.damome.ui.screen.records
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.harissabil.damome.core.utils.Result
+import com.harissabil.damome.core.utils.formatToTextToEmbed
+import com.harissabil.damome.core.utils.parseFormattedAmount
+import com.harissabil.damome.domain.model.Category
 import com.harissabil.damome.domain.model.Transaction
 import com.harissabil.damome.domain.model.TransactionType
 import com.harissabil.damome.domain.repository.CurrencyRepository
@@ -85,7 +88,8 @@ class RecordsViewModel(
 
     // Below is for the transaction to submit state methods
     fun onAmoutChanged(amount: String) {
-        _transactionToSubmitState.update { it.copy(amount = amount.toDoubleOrNull()) }
+        val parsedAmount = parseFormattedAmount(amount, _currency.value)
+        _transactionToSubmitState.update { it.copy(amount = parsedAmount) }
     }
 
     fun onDateAndTimeChanged(dateTime: LocalDateTime) {
@@ -126,10 +130,21 @@ class RecordsViewModel(
         val description = _transactionToSubmitState.value.description
         val textToEmbed = _transactionToSubmitState.value.textToEmbed
 
-        val embedding = if (description != textToEmbed) {
+        val textToEmbedAgain = description?.let {
+            formatToTextToEmbed(
+                transactionType = _transactionToSubmitState.value.type,
+                amount = _transactionToSubmitState.value.amount!!,
+                category = Category.entries.find { it.value == _transactionToSubmitState.value.category }!!,
+                currency = _currency.value,
+                description = it
+            )
+        }
+
+        val embedding = if (textToEmbed != textToEmbedAgain) {
             if (isTextEmbeddingNeeded()) {
-                if (description != null) {
-                    when (val result = textEmbeddingRepository.getEmbedding(description)) {
+                if (description != null && textToEmbedAgain != null) {
+                    println("Text to embed again: $textToEmbedAgain")
+                    when (val result = textEmbeddingRepository.getEmbedding(textToEmbedAgain)) {
                         is Result.Error -> {
                             _messageFlow.emit(result.message)
                             _transactionToSubmitState.update { it.copy(isLoading = false) }
@@ -144,13 +159,13 @@ class RecordsViewModel(
 
         val transactionToUpdate = Transaction(
             id = _transactionToSubmitState.value.transactionToEdit?.id,
-            type = _transactionToSubmitState.value.type ?: TransactionType.INCOME,
+            type = _transactionToSubmitState.value.type,
             timestamp = _transactionToSubmitState.value.timestamp,
             currency = _transactionToSubmitState.value.currency ?: _currency.value,
             amount = _transactionToSubmitState.value.amount ?: 0.0,
             category = _transactionToSubmitState.value.category ?: "bills",
             description = _transactionToSubmitState.value.description,
-            textToEmbed = _transactionToSubmitState.value.description,
+            textToEmbed = textToEmbedAgain,
             embedding = embedding
         )
 

@@ -45,12 +45,12 @@ import androidx.compose.ui.unit.dp
 import com.harissabil.damome.core.theme.errorDark
 import com.harissabil.damome.core.theme.errorLight
 import com.harissabil.damome.core.theme.spacing
+import com.harissabil.damome.core.utils.formatToLocalizedString
 import com.harissabil.damome.core.utils.toHhMm
 import com.harissabil.damome.core.utils.toYyyyMmDd
 import com.harissabil.damome.domain.model.Category
 import com.harissabil.damome.domain.model.TransactionType
 import com.harissabil.damome.ui.components.speeddial_by_leinardi.CategoryDropdownMenu
-import com.harissabil.damome.ui.transformer.DecimalAmountTransformation
 import kotlinx.datetime.LocalDateTime
 import network.chaintech.kmp_date_time_picker.utils.now
 import top.yukonga.miuix.kmp.basic.Button
@@ -70,6 +70,7 @@ fun AddTransactionBottomSheet(
     sheetState: SheetState,
     currency: String,
     amount: Double,
+    scannedAmount: Double?,
     onAmountChange: (String) -> Unit,
     dateAndTime: LocalDateTime,
     onDateAndTimeChange: (LocalDateTime) -> Unit,
@@ -123,7 +124,27 @@ fun AddTransactionBottomSheet(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
                 ) {
-                    TextField(
+//                    TextField(
+//                        modifier = Modifier.takeIf { isAmountError }?.then(
+//                            Modifier.border(
+//                                1.dp,
+//                                if (isSystemInDarkTheme()) errorDark else errorLight,
+//                                RoundedCornerShape(16.dp)
+//                            )
+//                        )
+//                            ?: Modifier,
+//                        value = if (amount == 0.0) "" else amount.toLong().toString(),
+//                        onValueChange = {
+//                            val sanitizedValue = it.replace(Regex("[^0-9.]"), "")
+//                            onAmountChange(sanitizedValue)
+//                        },
+//                        keyboardOptions = KeyboardOptions(
+//                            keyboardType = KeyboardType.NumberPassword,
+//                            imeAction = ImeAction.Next
+//                        ),
+//                        visualTransformation = DecimalAmountTransformation(currency)
+//                    )
+                    CurrencyTextField(
                         modifier = Modifier.takeIf { isAmountError }?.then(
                             Modifier.border(
                                 1.dp,
@@ -132,16 +153,17 @@ fun AddTransactionBottomSheet(
                             )
                         )
                             ?: Modifier,
-                        value = if (amount == 0.0) "" else amount.toLong().toString(),
-                        onValueChange = {
-                            val sanitizedValue = it.replace(Regex("[^0-9.]"), "")
-                            onAmountChange(sanitizedValue)
+                        initialText = if (amount == 0.0) "" else formatToLocalizedString(amount, currency),
+                        scannedAmount = scannedAmount?.let { formatToLocalizedString(it, currency) },
+                        currencySymbol = currency,
+                        onChange = {
+                            println("amount to be changed: $it")
+                            onAmountChange(it)
                         },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.NumberPassword,
+                            keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next
                         ),
-                        visualTransformation = DecimalAmountTransformation(currency)
                     )
                     if (isAmountError) {
                         Text(
@@ -344,6 +366,7 @@ fun AddTransactionBottomSheet(
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColorsPrimary(),
                 onClick = {
+                    println("amount: $amount")
                     if (amount.isNaN() || amount <= 0.0 || amount > Double.MAX_VALUE) {
                         isAmountError = true
                         return@Button

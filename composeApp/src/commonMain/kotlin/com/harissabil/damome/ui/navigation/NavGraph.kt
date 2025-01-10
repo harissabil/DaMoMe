@@ -1,6 +1,8 @@
 package com.harissabil.damome.ui.navigation
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -23,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,6 +49,7 @@ import com.harissabil.damome.ui.components.HomeFab
 import com.harissabil.damome.ui.components.speeddial_by_leinardi.SpeedDialOverlay
 import com.harissabil.damome.ui.components.speeddial_by_leinardi.SpeedDialState
 import com.harissabil.damome.ui.screen.ask_ai.AskAiScreen
+import com.harissabil.damome.ui.screen.damommy.DamommyScreen
 import com.harissabil.damome.ui.screen.home.HomeScreen
 import com.harissabil.damome.ui.screen.home.HomeViewModel
 import com.harissabil.damome.ui.screen.more.MoreScreen
@@ -64,15 +66,16 @@ import kotlinx.datetime.toLocalDateTime
 import network.chaintech.kmp_date_time_picker.ui.datetimepicker.WheelDateTimePickerDialog
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-import top.yukonga.miuix.kmp.basic.Box
 import top.yukonga.miuix.kmp.basic.MiuixFabPosition
 import top.yukonga.miuix.kmp.basic.NavigationBar
 import top.yukonga.miuix.kmp.basic.NavigationItem
 import top.yukonga.miuix.kmp.basic.Scaffold
-import top.yukonga.miuix.kmp.basic.Text
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
-@OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3Api::class)
+@OptIn(
+    KoinExperimentalAPI::class, ExperimentalMaterial3Api::class,
+    ExperimentalSharedTransitionApi::class
+)
 @Composable
 fun NavGraph(
     modifier: Modifier = Modifier,
@@ -279,48 +282,54 @@ fun NavGraph(
         },
         floatingActionButtonPosition = MiuixFabPosition.End,
     ) { innerPadding ->
-        NavHost(
-            modifier = modifier.fillMaxSize()
-                .padding(bottom = innerPadding.calculateBottomPadding()),
-            navController = navController,
-            startDestination = startDestination
-        ) {
-            composable<Route.Onboarding> {
-                OnboardingScreen(
-                    modifier = modifier,
-                    onNavigateToHome = {
-                        navController.navigate(Route.Home) {
-                            popUpTo(Route.Onboarding) { inclusive = true }
+        SharedTransitionLayout {
+            NavHost(
+                modifier = modifier.fillMaxSize()
+                    .padding(bottom = innerPadding.calculateBottomPadding()),
+                navController = navController,
+                startDestination = startDestination
+            ) {
+                composable<Route.Onboarding> {
+                    OnboardingScreen(
+                        modifier = modifier,
+                        onNavigateToHome = {
+                            navController.navigate(Route.Home) {
+                                popUpTo(Route.Onboarding) { inclusive = true }
+                            }
                         }
-                    }
-                )
-            }
-
-            composable<Route.Home> {
-                HomeScreen(
-                    viewModel = homeViewModel,
-                )
-            }
-
-            composable<Route.Records> {
-                RecordsScreen()
-            }
-
-            composable<Route.AskAi> {
-                AskAiScreen()
-            }
-
-            composable<Route.DaMommy> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "DaMommy")
+                    )
                 }
-            }
 
-            composable<Route.More> {
-                MoreScreen(
-                    onBackupClick = onBackupClick,
-                    onRestoreClick = onRestoreClick,
-                )
+                composable<Route.Home> {
+                    HomeScreen(
+                        viewModel = homeViewModel,
+                    )
+                }
+
+                composable<Route.Records> {
+                    RecordsScreen()
+                }
+
+                composable<Route.AskAi> {
+                    AskAiScreen(
+                        animatedVisibilityScope = this,
+                        onFabClick = { navController.navigate(Route.DaMommy) }
+                    )
+                }
+
+                composable<Route.DaMommy> {
+                    DamommyScreen(
+                        animatedVisibilityScope = this,
+                        onNavigateUp = { navController.navigateUp() }
+                    )
+                }
+
+                composable<Route.More> {
+                    MoreScreen(
+                        onBackupClick = onBackupClick,
+                        onRestoreClick = onRestoreClick,
+                    )
+                }
             }
         }
 
@@ -351,6 +360,7 @@ fun NavGraph(
                 sheetState = addTransactionBottomSheetState,
                 currency = transactionToSubmitState.currency ?: homeState.currency,
                 amount = transactionToSubmitState.amount ?: 0.0,
+                scannedAmount = transactionToSubmitState.scannedAmount,
                 onAmountChange = homeViewModel::onAmoutChanged,
                 dateAndTime = transactionToSubmitState.timestamp.toLocalDateTime(TimeZone.currentSystemDefault()),
                 onDateAndTimeChange = homeViewModel::onDateAndTimeChanged,
@@ -360,7 +370,7 @@ fun NavGraph(
                 onCategoryChange = homeViewModel::onCategoryChanged,
                 description = transactionToSubmitState.description,
                 onDescriptionChange = homeViewModel::onDescriptionChanged,
-                transactionType = transactionToSubmitState.type ?: TransactionType.INCOME,
+                transactionType = transactionToSubmitState.type,
                 onTransactionTypeChange = homeViewModel::onTransactionTypeChanged,
                 isLoading = transactionToSubmitState.isLoading,
                 submitText = if (transactionToSubmitState.transactionToEdit != null) "Update" else "Save",
