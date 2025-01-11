@@ -200,7 +200,8 @@ class HomeViewModel(
             formatToTextToEmbed(
                 transactionType = _transactionToSubmitState.value.type,
                 amount = _transactionToSubmitState.value.amount!!,
-                category = Category.entries.find { it.value == _transactionToSubmitState.value.category }!!,
+                category = Category.entries.find { it.value == _transactionToSubmitState.value.category }
+                    ?: Category.BILLS,
                 currency = _state.value.currency,
                 description = it
             )
