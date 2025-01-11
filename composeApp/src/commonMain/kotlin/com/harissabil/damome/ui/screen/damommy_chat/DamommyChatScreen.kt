@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,7 +56,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.basic.IconButton
-import top.yukonga.miuix.kmp.basic.Scaffold
 import top.yukonga.miuix.kmp.basic.Text
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 import kotlin.uuid.ExperimentalUuidApi
@@ -101,6 +101,8 @@ fun SharedTransitionScope.DamommyChatScreen(
             animatedVisibilityScope = animatedVisibilityScope
         ),
         topBar = { DamommyTopAppBar(onNavigateUp = onNavigateUp) },
+        containerColor = MiuixTheme.colorScheme.background,
+        contentColor = MiuixTheme.colorScheme.onBackground,
     ) { innerPadding ->
         Column(
             modifier = modifier
