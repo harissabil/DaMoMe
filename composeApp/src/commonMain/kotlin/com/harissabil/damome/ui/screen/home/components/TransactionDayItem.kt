@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -46,7 +47,6 @@ import com.harissabil.damome.domain.model.Category.Companion.toCategory
 import com.harissabil.damome.domain.model.Transaction
 import com.harissabil.damome.domain.model.TransactionType
 import com.harissabil.damome.ui.components.BaseCard
-import top.yukonga.miuix.kmp.basic.Box
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.basic.Text
 import top.yukonga.miuix.kmp.theme.MiuixTheme

@@ -14,10 +14,12 @@ sealed class Route {
     data object Records : Route()
 
     @Serializable
-    data object AskAi : Route()
+    data object DaMommy : Route()
 
     @Serializable
-    data object DaMommy : Route()
+    data class DaMommyChat(
+        val chatGroupId: Long? = null,
+    ) : Route()
 
     @Serializable
     data object More : Route()

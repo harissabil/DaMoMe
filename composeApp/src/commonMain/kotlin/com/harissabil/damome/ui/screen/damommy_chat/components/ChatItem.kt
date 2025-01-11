@@ -1,6 +1,5 @@
-package com.harissabil.damome.ui.screen.damommy.components
+package com.harissabil.damome.ui.screen.damommy_chat.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,15 +13,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.harissabil.damome.domain.model.ChatMessage
+import com.harissabil.damome.domain.model.Transaction
 import damome.composeapp.generated.resources.Res
 import damome.composeapp.generated.resources.img_damommy_avatar
 import org.jetbrains.compose.resources.painterResource
@@ -64,7 +61,7 @@ fun ChatItem(
                     color = if (chatMessage.isUser) {
                         MiuixTheme.colorScheme.primaryContainer
                     } else {
-                        MiuixTheme.colorScheme.disabledPrimary
+                        MiuixTheme.colorScheme.surface
                     },
                     shape = RoundedCornerShape(
                         topStart = if (chatMessage.isUser) 20.dp else 0.dp,
@@ -80,25 +77,16 @@ fun ChatItem(
                 color = if (chatMessage.isUser) {
                     MiuixTheme.colorScheme.onPrimaryContainer
                 } else {
-                    MiuixTheme.colorScheme.surface
+                    MiuixTheme.colorScheme.onSurface
                 },
             )
             if (!chatMessage.isUser) {
                 if (!chatMessage.relatedTransactions.isNullOrEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedButton(
-                        shape = RoundedCornerShape(12.dp),
-                        onClick = {
-
-                        },
-                        colors = ButtonDefaults.outlinedButtonColors().copy(
-                            containerColor = MaterialTheme.colorScheme.surface,
-                            contentColor = MaterialTheme.colorScheme.onSurface,
-
-                            ),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-                    ) {
-                        Text(text = "Bayar sekarang!")
+                    chatMessage.relatedTransactions.forEach { transaction: Transaction ->
+                        Spacer(modifier = Modifier.height(8.dp))
+                        RelatedTransactionItem(
+                            transaction = transaction
+                        )
                     }
                 }
             }

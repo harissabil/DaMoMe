@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ReceiptLong
-import androidx.compose.material.icons.filled.Forum
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +35,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.harissabil.damome.core.camera.rememberCameraManager
 import com.harissabil.damome.core.permission.PermissionCallback
 import com.harissabil.damome.core.permission.PermissionStatus
@@ -43,13 +43,14 @@ import com.harissabil.damome.core.permission.PermissionType
 import com.harissabil.damome.core.permission.createPermissionsManager
 import com.harissabil.damome.core.theme.spacing
 import com.harissabil.damome.domain.model.Category
-import com.harissabil.damome.domain.model.TransactionType
 import com.harissabil.damome.ui.components.AddTransactionBottomSheet
+import com.harissabil.damome.ui.components.DaMommyIcon
 import com.harissabil.damome.ui.components.HomeFab
 import com.harissabil.damome.ui.components.speeddial_by_leinardi.SpeedDialOverlay
 import com.harissabil.damome.ui.components.speeddial_by_leinardi.SpeedDialState
-import com.harissabil.damome.ui.screen.ask_ai.AskAiScreen
+import com.harissabil.damome.ui.navigation.components.CustomNavigationBar
 import com.harissabil.damome.ui.screen.damommy.DamommyScreen
+import com.harissabil.damome.ui.screen.damommy_chat.DamommyChatScreen
 import com.harissabil.damome.ui.screen.home.HomeScreen
 import com.harissabil.damome.ui.screen.home.HomeViewModel
 import com.harissabil.damome.ui.screen.more.MoreScreen
@@ -67,7 +68,6 @@ import network.chaintech.kmp_date_time_picker.ui.datetimepicker.WheelDateTimePic
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import top.yukonga.miuix.kmp.basic.MiuixFabPosition
-import top.yukonga.miuix.kmp.basic.NavigationBar
 import top.yukonga.miuix.kmp.basic.NavigationItem
 import top.yukonga.miuix.kmp.basic.Scaffold
 import top.yukonga.miuix.kmp.theme.MiuixTheme
@@ -88,8 +88,8 @@ fun NavGraph(
         Route.Onboarding,
         Route.Home,
         Route.Records,
-        Route.AskAi,
         Route.DaMommy,
+        Route.DaMommyChat(),
         Route.More,
     )
     val navigationBarItems = remember {
@@ -103,8 +103,8 @@ fun NavGraph(
                 icon = Icons.AutoMirrored.Filled.ReceiptLong
             ),
             NavigationItem(
-                label = "Ask AI",
-                icon = Icons.Default.Forum
+                label = "DaMommy",
+                icon = DaMommyIcon
             ),
             NavigationItem(
                 label = "More",
@@ -126,7 +126,7 @@ fun NavGraph(
     val showBottomBar: (route: Route) -> Boolean = { route ->
         when (route) {
             Route.Onboarding -> false
-            Route.DaMommy -> false
+            is Route.DaMommyChat -> false
             else -> true
         }
     }
@@ -135,7 +135,7 @@ fun NavGraph(
     selectedItem = when (currentRoute) {
         Route.Home -> 0
         Route.Records -> 1
-        Route.AskAi -> 2
+        Route.DaMommy -> 2
         Route.More -> 3
         else -> selectedItem
     }
@@ -235,14 +235,15 @@ fun NavGraph(
                 enter = slideInVertically(initialOffsetY = { it / 3 }) + fadeIn(),
                 exit = slideOutVertically(targetOffsetY = { it / 3 }) + fadeOut(),
             ) {
-                NavigationBar(
+                CustomNavigationBar(
                     items = navigationBarItems,
                     selected = selectedItem,
+                    skipColorFilterAtIndex = 2,
                     onClick = {
                         when (it) {
                             0 -> navController.navigateToTab(Route.Home)
                             1 -> navController.navigateToTab(Route.Records)
-                            2 -> navController.navigateToTab(Route.AskAi)
+                            2 -> navController.navigateToTab(Route.DaMommy)
                             3 -> navController.navigateToTab(Route.More)
                         }
                     },
@@ -310,16 +311,19 @@ fun NavGraph(
                     RecordsScreen()
                 }
 
-                composable<Route.AskAi> {
-                    AskAiScreen(
-                        animatedVisibilityScope = this,
-                        onFabClick = { navController.navigate(Route.DaMommy) }
-                    )
-                }
-
                 composable<Route.DaMommy> {
                     DamommyScreen(
                         animatedVisibilityScope = this,
+                        onFabClick = { navController.navigate(Route.DaMommyChat()) },
+                        onHistoryClick = { navController.navigate(Route.DaMommyChat(it)) }
+                    )
+                }
+
+                composable<Route.DaMommyChat> {
+                    val args = it.toRoute<Route.DaMommyChat>()
+                    DamommyChatScreen(
+                        animatedVisibilityScope = this,
+                        chatGroupId = args.chatGroupId,
                         onNavigateUp = { navController.navigateUp() }
                     )
                 }

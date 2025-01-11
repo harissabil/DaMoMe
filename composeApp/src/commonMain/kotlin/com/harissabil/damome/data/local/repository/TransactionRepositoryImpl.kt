@@ -78,8 +78,15 @@ class TransactionRepositoryImpl(
     override suspend fun retrieveSimilarTransactions(
         textEmbedding: FloatArray,
         neighbors: Int,
+        fromDate: LocalDate,
+        toDate: LocalDate,
     ): List<Transaction> {
-        return transactionLocalStore.findNearestNeighbors(textEmbedding, neighbors)
+        return transactionLocalStore.findNearestNeighbors(
+            textEmbedding,
+            neighbors,
+            fromDate,
+            toDate
+        )
             .map(ITransactionEntity::toTransaction)
     }
 }

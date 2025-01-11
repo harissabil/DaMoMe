@@ -1,4 +1,4 @@
-package com.harissabil.damome.ui.screen.damommy.components
+package com.harissabil.damome.ui.screen.damommy_chat.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -54,7 +54,7 @@ fun DamommyTopAppBar(
                     painter = painterResource(Res.drawable.img_damommy_avatar),
                     contentDescription = null,
                 )
-                Text("DaMommy AI", style = MiuixTheme.textStyles.title3.copy(fontSize = 22.sp))
+                Text("DaMommy", style = MiuixTheme.textStyles.title3.copy(fontSize = 22.sp))
             }
         },
         navigationIcon = {

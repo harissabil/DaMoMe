@@ -6,16 +6,34 @@ import java.util.Locale
 
 actual fun formatCurrency(currency: String, value: Double): String {
     val locale = when (currency) {
-        "USD" -> Locale.US
-        "IDR" -> Locale("id", "ID")
-        "VND" -> Locale("vi", "VN")
-        "SGD" -> Locale("en", "SG")
-        "KRW" -> Locale.KOREA
-        "EUR" -> Locale.GERMANY
-        "JPY" -> Locale.JAPAN
-        "CNY" -> Locale.CHINA
-        "DKK" -> Locale("da", "DK")
-        else -> Locale.US
+        "IDR" -> Locale("id", "ID") // Indonesia
+        "USD" -> Locale.US // United States
+        "EUR" -> Locale.GERMANY // Germany (default for Euro)
+        "JPY" -> Locale.JAPAN // Japan
+        "KRW" -> Locale.KOREA // South Korea
+        "CNY" -> Locale.CHINA // China
+        "SGD" -> Locale("en", "SG") // Singapore
+        "VND" -> Locale("vi", "VN") // Vietnam
+        "DKK" -> Locale("da", "DK") // Denmark
+        "AUD" -> Locale("en", "AU") // Australia
+        "BRL" -> Locale("pt", "BR") // Brazil
+        "CAD" -> Locale("en", "CA") // Canada
+        "CHF" -> Locale("de", "CH") // Switzerland
+        "GBP" -> Locale.UK // United Kingdom
+        "HKD" -> Locale("zh", "HK") // Hong Kong
+        "INR" -> Locale("hi", "IN") // India
+        "MXN" -> Locale("es", "MX") // Mexico
+        "MYR" -> Locale("ms", "MY") // Malaysia
+        "NOK" -> Locale("nb", "NO") // Norway
+        "NZD" -> Locale("en", "NZ") // New Zealand
+        "PHP" -> Locale("fil", "PH") // Philippines
+        "RUB" -> Locale("ru", "RU") // Russia
+        "SAR" -> Locale("ar", "SA") // Saudi Arabia
+        "SEK" -> Locale("sv", "SE") // Sweden
+        "THB" -> Locale("th", "TH") // Thailand
+        "TRY" -> Locale("tr", "TR") // Turkey
+        "ZAR" -> Locale("en", "ZA") // South Africa
+        else -> Locale.US // Default fallback
     }
 //    return String.format(locale = locale, "%,.2f", value)
     val formatter = NumberFormat.getCurrencyInstance(locale)

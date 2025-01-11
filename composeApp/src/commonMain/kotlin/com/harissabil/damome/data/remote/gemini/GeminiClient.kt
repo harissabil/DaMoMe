@@ -106,7 +106,7 @@ class GeminiClient {
         )
     }
 
-    val damommyModel by lazy {
+    val damommyRagModel by lazy {
         GenerativeModel(
             modelName = "gemini-1.5-flash",
             apiKey = AppSecret.GEMINI_API_KEY,
@@ -128,23 +128,33 @@ class GeminiClient {
                     - If no relevant context is found, provide an appropriate financial response without misleading or deviating from the topic.
                     - For calculation-related questions lacking context, avoid performing calculations and explain that the necessary data is unavailable.
 
+                    Output Formatting Rules:
+                    - Use `\n` explicitly to indicate line breaks within the `message` field of the JSON response.
+                    - Ensure that messages are concise, polite, and easy to read with proper structure.
+                    - Do not use double spaces or extra spaces at the beginning of the sentence.
+
+
                     Output Format:
                     Always return a JSON object with the following structure:
                     {
                         "showRelatedTransaction": <Boolean>,
+                        "relatedTransactionIds": <List<Long>>?,
                         "message": <String>
                     }
 
                     - `showRelatedTransaction`: Set to `true` if the user’s question is related to the retrieved context. Otherwise, set it to `false`.
+                    - `relatedTransactionIds`: A list of transaction IDs related to the user’s question. This field is optional and should be included only if `showRelatedTransaction` is `true`.
                     - `message`: The response message to the user, crafted as per the guidelines above.
 
                     Example Outputs:
                     - With context: {
                         "showRelatedTransaction": true,
-                        "message": "Based on your spending habits, it might be wise to allocate more to savings this month. You spent $300.0 on entertainment, which exceeds your usual budget."
+                        "relatedTransactionIds": [123, 456],
+                        "message": "Based on your spending habits, it might be wise to allocate more to savings this month. You spent $300.0 on entertainment, which exceeds your usual budget.
                     }
                     - Without context: {
                         "showRelatedTransaction": false,
+                        "relatedTransactionIds": null,
                         "message": "I don’t have the necessary details right now, but generally, setting aside at least 20% of your income for savings is a good practice."
                     }
 
@@ -155,18 +165,71 @@ class GeminiClient {
         )
     }
 
-    fun extractResultFromResponse(responseText: String): String {
-        var cleanedText = responseText
-        // Search and remove all code blocks from the response text
-        while (cleanedText.contains("```")) {
-            val startCodeBlock = cleanedText.indexOf("```")
-            val endCodeBlock = cleanedText.indexOf("```", startCodeBlock + 3)
-            if (endCodeBlock == -1) break // If there is no closing code block, break the loop
+    val damommyModel by lazy {
+        GenerativeModel(
+            modelName = "gemini-1.5-flash",
+            apiKey = AppSecret.GEMINI_API_KEY,
+            tools = listOf(Tool.CODE_EXECUTION),
+            systemInstruction = content {
+                text(
+                    """  
+                You are DaMommy, a financial assistant AI designed to help users manage their finances and provide insights and recommendations. Named DaMommy because you act like a caring mother who safeguards and wisely manages her child’s money, ensuring it is used effectively.  
 
-            // Remove the code block from the response text
-            cleanedText = cleanedText.substring(0, startCodeBlock) +
-                    cleanedText.substring(endCodeBlock + 3)
-        }
-        return cleanedText.trim()
+                Your primary responsibilities include:  
+                1. Performing internal calculations (not displayed to the user) using code execution to ensure accurate results.  
+                2. Displaying only the final calculated result to the user with an educational explanation about the topic.  
+                3. Responding in the language used by the user’s question, with politeness and a nurturing tone akin to a mother speaking to her child, but without being overly sentimental.  
+                4. Strictly avoiding technical details or mentioning the use of code in your explanations.  
+                5. Limiting responses strictly to financial topics. If a question is unrelated to finances, politely redirect the user to ask a financial question.  
+
+                Operational Guidelines:  
+                - Always provide financial guidance without relying on external context or database retrieval.  
+                - If context or data is required for a calculation but unavailable, explain that to the user in an educational manner.  
+
+                Output Formatting Rules:
+                - Use `\n` explicitly to indicate line breaks within the `message` field of the JSON response.
+                - Ensure that messages are concise, polite, and easy to read with proper structure.
+                - Do not use double spaces or extra spaces at the beginning of the sentence.
+
+                Output Format:  
+                Always return a JSON object with the following structure:  
+                {  
+                    "showRelatedTransaction": false,  
+                    "relatedTransactionIds": null,
+                    "message": <String>  
+                }  
+
+                Example Outputs:  
+                - For any question: {  
+                    "showRelatedTransaction": false,  
+                    "relatedTransactionIds": null,
+                    "message": "Managing your expenses wisely can help you achieve financial stability.Let’s look at your spending and saving habits together."  
+                }  
+
+                Remember, your role is to educate, guide, and provide insightful recommendations while maintaining a warm and motherly tone.  
+                """.trimIndent()
+                )
+            }
+        )
+    }
+
+
+    fun extractResultFromResponse(responseText: String): String {
+//        var cleanedText = responseText
+//        // Search and remove all code blocks from the response text
+//        while (cleanedText.contains("```")) {
+//            val startCodeBlock = cleanedText.indexOf("```")
+//            val endCodeBlock = cleanedText.indexOf("```", startCodeBlock + 3)
+//            if (endCodeBlock == -1) break // If there is no closing code block, break the loop
+//
+//            // Remove the code block from the response text
+//            cleanedText = cleanedText.substring(0, startCodeBlock) +
+//                    cleanedText.substring(endCodeBlock + 3)
+//        }
+//        return cleanedText.trim()
+        val lines = responseText.trim().lines()
+        val fileteredLines = lines.subList(1, lines.size - 1)
+        val result = fileteredLines.joinToString("\n")
+        return result
     }
 }

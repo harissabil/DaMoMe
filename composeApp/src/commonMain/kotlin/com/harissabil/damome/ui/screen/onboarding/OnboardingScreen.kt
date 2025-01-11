@@ -4,6 +4,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,7 +34,6 @@ import damome.composeapp.generated.resources.damome_promo_dark
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-import top.yukonga.miuix.kmp.basic.Box
 import top.yukonga.miuix.kmp.basic.Button
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Scaffold
@@ -49,7 +49,12 @@ fun OnboardingScreen(
     val viewModel: OnboardingViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val currencies = listOf("IDR", "USD", "EUR", "JPY", "KRW", "CNY", "SGD", "VND", "DKK")
+    val currencies = listOf(
+        "IDR",
+        "AUD", "BRL", "CAD", "CHF", "CNY", "DKK", "EUR", "GBP", "HKD",
+        "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "RUB",
+        "SAR", "SEK", "SGD", "THB", "TRY", "USD", "VND", "ZAR"
+    )
 
     val snackbarHostState = remember { SnackbarHostState() }
 

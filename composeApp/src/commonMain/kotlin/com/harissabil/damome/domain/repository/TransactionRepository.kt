@@ -17,5 +17,7 @@ interface TransactionRepository {
     suspend fun retrieveSimilarTransactions(
         textEmbedding: FloatArray,
         neighbors: Int,
+        fromDate: LocalDate,
+        toDate: LocalDate
     ): List<Transaction>
 }

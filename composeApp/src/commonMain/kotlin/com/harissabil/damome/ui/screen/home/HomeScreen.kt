@@ -34,7 +34,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.harissabil.damome.core.theme.spacing
 import com.harissabil.damome.domain.model.Category
 import com.harissabil.damome.domain.model.Transaction
-import com.harissabil.damome.domain.model.TransactionType
 import com.harissabil.damome.ui.components.AddTransactionBottomSheet
 import com.harissabil.damome.ui.components.CustomSnackbarHost
 import com.harissabil.damome.ui.screen.home.components.HomeTopAppBar
@@ -199,7 +198,7 @@ fun HomeScreen(
                 onCategoryChange = viewModel::onCategoryChanged,
                 description = transactionToSubmitState.description,
                 onDescriptionChange = viewModel::onDescriptionChanged,
-                transactionType = transactionToSubmitState.type ?: TransactionType.INCOME,
+                transactionType = transactionToSubmitState.type,
                 onTransactionTypeChange = viewModel::onTransactionTypeChanged,
                 isLoading = transactionToSubmitState.isLoading,
                 submitText = if (transactionToSubmitState.transactionToEdit != null) "Update" else "Save",

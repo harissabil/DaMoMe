@@ -49,7 +49,15 @@ class TransactionLocalStoreDesktop(
     override suspend fun findNearestNeighbors(
         queryVector: FloatArray,
         neighbors: Int,
+        fromDate: LocalDate,
+        toDate: LocalDate,
     ): List<TransactionEntity> {
-        return transactionDao.findNearestNeighbors(queryVector, neighbors)
+        val tz = TimeZone.currentSystemDefault()
+        val from = fromDate.atStartOfDayIn(tz).toEpochMilliseconds()
+        val to = toDate.atTime(23, 59, 59).toInstant(tz).toEpochMilliseconds()
+
+        return transactionDao.findNearestNeighbors(
+            queryVector, neighbors, from, to
+        )
     }
 }

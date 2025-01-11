@@ -2,8 +2,6 @@ package com.harissabil.damome.data.local.room
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
 import com.harissabil.damome.data.local.entity.TransactionEntity
@@ -48,11 +46,13 @@ interface TransactionDao {
     @Query(
         """
         SELECT * FROM TransactionEntity 
-        WHERE embedding  LIKE :queryVector LIMIT :neighbors
+        WHERE embedding  LIKE :queryVector BETWEEN :fromDate AND :toDate LIMIT :neighbors
     """
     )
     suspend fun findNearestNeighbors(
         queryVector: FloatArray,
         neighbors: Int,
+        fromDate: Long,
+        toDate: Long,
     ): List<TransactionEntity>
 }

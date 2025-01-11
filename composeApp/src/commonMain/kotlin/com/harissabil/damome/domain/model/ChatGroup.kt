@@ -2,6 +2,8 @@ package com.harissabil.damome.domain.model
 
 import com.harissabil.damome.data.local.entity.IChatGroupEntity
 import com.harissabil.damome.data.local.entity.IChatMessageEntity
+import dev.shreyaspatil.ai.client.generativeai.type.Content
+import dev.shreyaspatil.ai.client.generativeai.type.content
 import kotlinx.datetime.Instant
 
 data class ChatGroup(
@@ -37,4 +39,12 @@ fun IChatMessageEntity.toChatMessage(): ChatMessage {
         message = message,
         timestamp = timestamp,
     )
+}
+
+fun ChatMessage.toContent(): Content {
+    return content(
+        role = if (this.isUser) "user" else "model",
+    ) {
+        text(this@toContent.message)
+    }
 }

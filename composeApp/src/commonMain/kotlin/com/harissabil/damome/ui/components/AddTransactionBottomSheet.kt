@@ -19,6 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -220,7 +222,7 @@ fun AddTransactionBottomSheet(
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.CalendarMonth,
+                        imageVector = Icons.Outlined.Schedule,
                         contentDescription = "Time"
                     )
                     Box(modifier = modifier.height(IntrinsicSize.Min)) {

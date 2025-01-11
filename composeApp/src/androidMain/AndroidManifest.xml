@@ -23,6 +23,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/App.Starting.Theme"
+            android:windowSoftInputMode="adjustResize"
             tools:ignore="DiscouragedApi,LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

@@ -14,5 +14,10 @@ interface TransactionLocalStore<T> {
 
     fun all(type: String): Flow<List<T>>
 
-    suspend fun findNearestNeighbors(queryVector: FloatArray, neighbors: Int): List<T>
+    suspend fun findNearestNeighbors(
+        queryVector: FloatArray,
+        neighbors: Int,
+        fromDate: LocalDate,
+        toDate: LocalDate
+    ): List<T>
 }

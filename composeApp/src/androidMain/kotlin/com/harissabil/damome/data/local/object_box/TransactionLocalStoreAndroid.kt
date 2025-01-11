@@ -5,14 +5,11 @@ import io.objectbox.Property
 import io.objectbox.kotlin.toFlow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
 import kotlin.reflect.KClass
 
 class TransactionLocalStoreAndroid<T : Any>(
@@ -59,9 +56,20 @@ class TransactionLocalStoreAndroid<T : Any>(
         return entityBox.query(typeProperty.equal(type)).build().subscribe().toFlow()
     }
 
-    override suspend fun findNearestNeighbors(queryVector: FloatArray, neighbors: Int): List<T> {
-        val query =
-            entityBox.query(embeddingProperty.nearestNeighbors(queryVector, neighbors)).build()
+    override suspend fun findNearestNeighbors(
+        queryVector: FloatArray,
+        neighbors: Int,
+        fromDate: LocalDate,
+        toDate: LocalDate,
+    ): List<T> {
+        val tz = TimeZone.currentSystemDefault()
+        val from = fromDate.atStartOfDayIn(tz).toEpochMilliseconds()
+        val to = toDate.atTime(23, 59, 59).toInstant(tz).toEpochMilliseconds()
+
+        val query = entityBox
+            .query(embeddingProperty.nearestNeighbors(queryVector, neighbors))
+            .between(timestampProperty, from, to)
+            .build()
         return query.find()
     }
 }
