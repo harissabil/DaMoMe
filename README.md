@@ -68,9 +68,7 @@ Here are some of the libraries used to build the app:
 To build this project, you need the latest stable version of Android Studio.  
 
 1. Clone or download the project and open it in Android Studio.  
-2. Get your [Gemini API key](https://aistudio.google.com/apikey) and add it to the `AppSecret.kt` file located in:  
-   `src/commonMain/kotlin/com/harissabil/damome/core/secret`.  
-   The file should look like this:  
+2. Get your [Gemini API key](https://aistudio.google.com/apikey) and add it to the `AppSecret.kt` file located in: `src/commonMain/kotlin/com/harissabil/damome/core/secret` like the following:
 
    ```kotlin
    package com.harissabil.damome.core.secret  
