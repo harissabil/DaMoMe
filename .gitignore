@@ -17,4 +17,4 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 
-composeApp/src/commonMain/kotlin/com/harissabil/damome/core/secret/
+#composeApp/src/commonMain/kotlin/com/harissabil/damome/core/secret/
