@@ -70,6 +70,8 @@ To build this project, you need the latest stable version of [Android Studio](ht
 1. Clone or download the project and open it in Android Studio.  
 2. Get your [Gemini API key](https://aistudio.google.com/apikey) and add it to the `AppSecret.kt` file located in: `src/commonMain/kotlin/com/harissabil/damome/core/secret` like the following:
 
+   **NOTE**: For the purpose of the Kotlin Multiplatform Contest, I have temporarily added my own API key, so this step is not required for now.  
+
    ```kotlin
    package com.harissabil.damome.core.secret  
 
