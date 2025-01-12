@@ -65,7 +65,7 @@ Here are some of the libraries used to build the app:
 
 ## Installation
 
-To build this project, you need the latest stable version of Android Studio.  
+To build this project, you need the latest stable version of [Android Studio](https://developer.android.com/studio) and [Kotlin Multiplatform Plugin](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform) installed.  
 
 1. Clone or download the project and open it in Android Studio.  
 2. Get your [Gemini API key](https://aistudio.google.com/apikey) and add it to the `AppSecret.kt` file located in: `src/commonMain/kotlin/com/harissabil/damome/core/secret` like the following:
