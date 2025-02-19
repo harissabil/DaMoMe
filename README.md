@@ -13,6 +13,7 @@ The app addresses the issue of low financial literacy, which remains a persisten
 - [About RAG](#about-rag)
 - [Library Used](#library-used)
 - [Installation](#installation)
+- [Future Roadmap](#future-roadmap)
 - [License](#license)
 
 ## Demo Video
