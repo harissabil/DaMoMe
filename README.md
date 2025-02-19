@@ -2,7 +2,7 @@
 
 # DaMoMe: Daily Money Manager
 
-DaMoMe is a smart income and expense tracking app built with Kotlin Multiplatform, targeting Android and Desktop. It simplifies financial management by allowing users to scan receipts for quick income or expense recording, avoiding the need for manual input. Additionally, the app features an AI-powered chatbot with RAG support (currently for Android) to provide personalized financial advice and insights tailored to the user’s needs.
+DaMoMe is a smart income and expense tracking app built with Kotlin Multiplatform, targeting Android and Desktop. It simplifies financial management by allowing users to scan receipts for quick income or expense recording, avoiding the need for manual input. Additionally, the app features an AI-powered chatbot with Retrieval-Augmented Generation (RAG) support (currently for Android) to provide personalized financial advice and insights tailored to the user’s needs.
 
 The app addresses the issue of low financial literacy, which remains a persistent challenge. For instance, the 2024 P-Fin Index reports that [financial literacy in the US has hovered around 50% for eight consecutive years](https://gflec.org/initiatives/personal-finance-index/), with a 2% drop in the past two years. DaMoMe offers an accessible solution to promote better money management habits. With its intuitive features and advanced AI combination, DaMoMe helps users make smarter financial decisions and stay in control of their finances.
 
@@ -93,6 +93,13 @@ To build this project, you need the latest stable version of [Android Studio](ht
    
 6. Click **OK**.
 7. Use this configuration and then click **Run**.
+
+## Future Roadmap  
+
+- [ ] Pocket system (track funds from bank, e-wallet, etc.)  
+- [ ] Vector database for desktop (RAG support)  
+- [ ] Multi-currency support  
+- [ ] Statistics and insights  
 
 ## License
 DaMoMe is open-source and released under the [MIT License](LICENSE).
