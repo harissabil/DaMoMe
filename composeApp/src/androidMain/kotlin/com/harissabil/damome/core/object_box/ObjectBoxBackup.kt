@@ -3,7 +3,9 @@ package com.harissabil.damome.core.object_box
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
+import android.provider.OpenableColumns
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -132,7 +134,7 @@ class ObjectBoxBackup(private val context: Context) {
         restartIntent!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(restartIntent)
         if (context is Activity) {
-            (context as Activity).finish()
+            context.finish()
         }
         Runtime.getRuntime().exit(0)
     }
@@ -279,6 +281,22 @@ class ObjectBoxBackup(private val context: Context) {
         .registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             if (uri != null) {
                 try {
+                    val type = context.contentResolver.getType(uri)
+                    val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
+                    val nameIndex: Int? = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    cursor?.moveToFirst()
+                    val name: String? = nameIndex?.let { cursor.getString(it) }
+                    cursor?.close()
+                    val lastDotPosition = name?.lastIndexOf(".")
+                    Log.i("backupFileChooser", "File type: $type, File name: $name")
+                    if (lastDotPosition != null && lastDotPosition != -1) {
+                        val extension = name.substring(lastDotPosition + 1)
+                        Log.i("backupFileChooser", "File extension: $extension")
+                        if (extension != "mdb") {
+                            onCompleteListener?.onComplete(false, "Invalid file type")
+                            return@registerForActivityResult
+                        }
+                    }
                     context.contentResolver.openInputStream(uri)?.use { input ->
                         boxStore?.closeThreadResources()
                         boxStore?.close()

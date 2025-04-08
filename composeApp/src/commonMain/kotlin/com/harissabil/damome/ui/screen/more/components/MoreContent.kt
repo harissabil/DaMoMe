@@ -184,7 +184,7 @@ fun MoreContent(
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             modifier = Modifier.alpha(0.5f),
-                            text = "Version 1.0.0-beta1",
+                            text = "Version 1.0.0-beta2",
                             style = MiuixTheme.textStyles.footnote1,
                         )
                     }
