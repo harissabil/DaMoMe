@@ -1,0 +1,171 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:8413265848357223561",
+      "lastPropertyId": "3:3710105721104135587",
+      "name": "ChatGroupEntity",
+      "properties": [
+        {
+          "id": "1:3911425348000887939",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6735550910354026360",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:3710105721104135587",
+          "name": "timestamp",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:2824129550249289526",
+      "lastPropertyId": "6:1773975946702283926",
+      "name": "ChatMessageEntity",
+      "properties": [
+        {
+          "id": "1:1662245636263154297",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3090345368751040394",
+          "name": "isUser",
+          "type": 1
+        },
+        {
+          "id": "3:1127742785820905213",
+          "name": "order",
+          "type": 5
+        },
+        {
+          "id": "4:7803689113353705305",
+          "name": "message",
+          "type": 9
+        },
+        {
+          "id": "5:264406569954098349",
+          "name": "timestamp",
+          "type": 6
+        },
+        {
+          "id": "6:1773975946702283926",
+          "name": "chatGroupId",
+          "indexId": "1:534675334900479907",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "ChatGroupEntity"
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:8996488769958882641",
+          "name": "transactions",
+          "targetId": "4:6080997131706613099"
+        }
+      ]
+    },
+    {
+      "id": "3:1793601587802287839",
+      "lastPropertyId": "2:3627830438690927450",
+      "name": "CurrencyEntity",
+      "properties": [
+        {
+          "id": "1:7891891031540562088",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3627830438690927450",
+          "name": "currency",
+          "indexId": "2:7274186823035380644",
+          "type": 9,
+          "flags": 2080
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:6080997131706613099",
+      "lastPropertyId": "9:8454868339715643870",
+      "name": "TransactionEntity",
+      "properties": [
+        {
+          "id": "1:1630225688733778603",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:430684521307028823",
+          "name": "type",
+          "indexId": "3:5013153575196071765",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "3:7822312007973185896",
+          "name": "timestamp",
+          "indexId": "4:7529207539491353407",
+          "type": 6,
+          "flags": 8
+        },
+        {
+          "id": "4:6575014342610650549",
+          "name": "amount",
+          "type": 8
+        },
+        {
+          "id": "5:6845654662037937997",
+          "name": "currency",
+          "type": 9
+        },
+        {
+          "id": "6:8963627111543874335",
+          "name": "category",
+          "type": 9
+        },
+        {
+          "id": "7:3915501197344404520",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "8:8434497739408603493",
+          "name": "text_to_embed",
+          "type": 9
+        },
+        {
+          "id": "9:8454868339715643870",
+          "name": "embedding",
+          "indexId": "5:2336736931849467370",
+          "type": 28,
+          "flags": 8
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "4:6080997131706613099",
+  "lastIndexId": "5:2336736931849467370",
+  "lastRelationId": "1:8996488769958882641",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

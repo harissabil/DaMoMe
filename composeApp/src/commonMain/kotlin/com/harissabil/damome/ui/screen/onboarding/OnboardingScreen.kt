@@ -50,9 +50,8 @@ fun OnboardingScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val currencies = listOf(
-        "IDR",
-        "AUD", "BRL", "CAD", "CHF", "CNY", "DKK", "EUR", "GBP", "HKD",
-        "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "RUB",
+        "AUD", "BRL", "CAD", "CHF", "CNY", "DKK", "DZD", "EUR", "GBP", "HKD",
+        "IDR", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "RUB",
         "SAR", "SEK", "SGD", "THB", "TRY", "USD", "VND", "ZAR"
     )
 
