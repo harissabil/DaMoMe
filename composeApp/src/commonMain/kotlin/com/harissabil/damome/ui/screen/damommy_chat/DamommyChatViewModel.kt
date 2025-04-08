@@ -3,6 +3,7 @@ package com.harissabil.damome.ui.screen.damommy_chat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.harissabil.damome.core.utils.Result
+import com.harissabil.damome.core.utils.toReadableDateTime
 import com.harissabil.damome.data.remote.gemini.GeminiClient
 import com.harissabil.damome.domain.model.ChatGroup
 import com.harissabil.damome.domain.model.ChatMessage
@@ -132,7 +133,7 @@ class DamommyChatViewModel(
                     """
                         Here is the retrieved context
                         --------------------------------------------------
-                        ${retrievedContext.joinToString("\n") { it.toString() }}
+                        ${retrievedContext.map { it.toTransactionChatContext() }.joinToString("\n") { it.toString() }}
                         --------------------------------------------------
                         Here is the user\'s query: ${userMessage.message}
                     """.trimIndent()
