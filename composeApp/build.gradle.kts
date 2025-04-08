@@ -25,9 +25,9 @@ kotlin {
             apply(plugin = "kotlin-kapt")
         }
 
-        dependencies {
-            debugImplementation("io.objectbox:objectbox-android-objectbrowser:4.0.3")
-        }
+//        dependencies {
+//            debugImplementation("io.objectbox:objectbox-android-objectbrowser:4.0.3")
+//        }
         apply(plugin = "io.objectbox")
     }
 
@@ -46,7 +46,11 @@ kotlin {
         }
     }
 
-    jvm("desktop")
+    jvm("desktop") {
+        tasks.withType<org.jetbrains.kotlin.gradle.internal.KaptTask> {
+            enabled = false
+        }
+    }
 
     cocoapods {
         summary = "Some description for the Shared Module"
@@ -94,8 +98,11 @@ kotlin {
             // Apache I/O
             implementation("commons-io:commons-io:2.18.0")
 
-            //Material Design Implementation
+            // Material Design Implementation
             implementation("com.google.android.material:material:1.12.0")
+
+            // ReLinker
+            implementation("com.getkeepsafe.relinker:relinker:1.4.4")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -177,8 +184,13 @@ android {
         applicationId = "com.harissabil.damome"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 3
-        versionName = "1.0.0-beta1"
+        versionCode = 7
+        versionName = "1.0.0-beta3"
+    }
+    bundle {
+        abi {
+            enableSplit = false
+        }
     }
     packaging {
         resources {
@@ -215,9 +227,21 @@ compose.desktop {
         mainClass = "com.harissabil.damome.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
             packageName = "com.harissabil.damome"
             packageVersion = "1.0.0"
         }
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.internal.KaptTask>().configureEach {
+    if (name.contains("Desktop", ignoreCase = true)) {
+        enabled = false
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.internal.KaptWithoutKotlincTask>().configureEach {
+    if (name.contains("Desktop", ignoreCase = true)) {
+        enabled = false
     }
 }
