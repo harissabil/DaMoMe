@@ -1,6 +1,7 @@
 package com.harissabil.damome.data.local.entity
 
 import com.harissabil.damome.core.utils.Currency
+import com.harissabil.damome.data.local.object_box.CurrencyConverter
 import com.harissabil.damome.data.local.object_box.TimestampConverter
 import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
@@ -21,6 +22,7 @@ data class TransactionEntity(
     @Convert(converter = TimestampConverter::class, dbType = Long::class)
     override var timestamp: Instant,
     override var amount: Double,
+    @Convert(converter = CurrencyConverter::class, dbType = String::class)
     override var currency: Currency,
     override var category: String,
     override var description: String? = null,
