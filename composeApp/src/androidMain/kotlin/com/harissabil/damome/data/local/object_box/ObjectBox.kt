@@ -5,7 +5,6 @@ import android.util.Log
 import com.getkeepsafe.relinker.ReLinker
 import com.harissabil.damome.data.local.entity.MyObjectBox
 import io.objectbox.BoxStore
-import java.io.File
 
 object ObjectBox {
     lateinit var store: BoxStore
