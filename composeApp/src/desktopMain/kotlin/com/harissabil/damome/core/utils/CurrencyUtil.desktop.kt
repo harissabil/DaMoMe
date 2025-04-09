@@ -26,6 +26,7 @@ actual fun parseFormattedAmount(amount: String, currency: Currency): Double? {
             NumberFormat.getNumberInstance(Locale(locale.language, locale.region)) as DecimalFormat
         format.parse(amount)?.toDouble()
     } catch (e: Exception) {
+        println("Error parsing amount: $amount - ${e.message}")
         null
     }
 }

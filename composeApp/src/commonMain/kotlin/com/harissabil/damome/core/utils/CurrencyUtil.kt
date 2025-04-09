@@ -3,8 +3,7 @@ package com.harissabil.damome.core.utils
 import androidx.compose.ui.text.intl.Locale
 
 
-enum class  Currency(val symbol : String, val languageTag : String ){
-
+enum class Currency(val symbol: String, val languageTag: String) {
     IDR("IDR", "id-ID"), // Indonesia
     USD("USD", "en-US"), // United States
     EUR("EUR", "de-DE"), // Germany (default for Euro)
@@ -37,7 +36,7 @@ enum class  Currency(val symbol : String, val languageTag : String ){
 }
 
 fun List<Currency>.getSymbolsList(): List<String> {
-    return Currency.entries.mapNotNull {  innerCurrency ->
+    return Currency.entries.mapNotNull { innerCurrency ->
         // cause the EMPTY currency is not a valid currency
         innerCurrency.symbol.takeIf { it.isNotEmpty() }
     }
@@ -45,10 +44,10 @@ fun List<Currency>.getSymbolsList(): List<String> {
 
 
 fun com.harissabil.damome.domain.model.Currency.toCurrency(): Currency {
-    var currency : Currency? = null
+    var currency: Currency? = null
     Currency.entries.forEach { innerCurrency ->
         if (this.currency == innerCurrency.symbol) {
-           currency = innerCurrency
+            currency = innerCurrency
         }
     }
     return currency ?: Currency.EMPTY

@@ -1,5 +1,6 @@
 package com.harissabil.damome.core.utils
 
+import android.util.Log
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
@@ -26,6 +27,7 @@ actual fun parseFormattedAmount(amount: String, currency: Currency): Double? {
             NumberFormat.getNumberInstance(Locale(locale.language, locale.region)) as DecimalFormat
         format.parse(amount)?.toDouble()
     } catch (e: Exception) {
+        Log.e("CurrencyUtil", "Error parsing amount: $amount", e)
         null
     }
 }
