@@ -15,5 +15,5 @@ fun formatToTextToEmbed(
             amount.toString(),
             currency
         )
-    } $currency for ${category.value}: ${description.lowercase()}"
+    } ${currency.symbol} for ${category.value}: ${description.lowercase()}"
 }
