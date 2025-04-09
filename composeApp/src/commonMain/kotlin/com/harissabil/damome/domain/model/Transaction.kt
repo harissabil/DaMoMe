@@ -14,22 +14,7 @@ data class Transaction(
     val description: String?,
     val textToEmbed: String?,
     val embedding: FloatArray?,
-) {
-    fun toTransactionChatContext() : String {
-        val transactionType = if (type == TransactionType.INCOME) "income" else "expense"
-        val transactionAmount = "$amount ${currency.symbol}"
-        val transactionCategory = category
-        val transactionDescription = description ?: ""
-        val transactionDate = timestamp.toString()
-
-        return """
-            $transactionType: $transactionAmount
-            Category: $transactionCategory
-            Description: $transactionDescription
-            Date: $transactionDate
-        """.trimIndent()
-    }
-}
+)
 
 enum class TransactionType(val value: String) {
     INCOME("income"),
