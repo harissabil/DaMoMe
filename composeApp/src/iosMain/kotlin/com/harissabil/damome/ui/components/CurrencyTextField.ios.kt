@@ -3,6 +3,7 @@ package com.harissabil.damome.ui.components
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.harissabil.damome.core.utils.Currency
 
 @Composable
 actual fun CurrencyTextField(
@@ -13,7 +14,7 @@ actual fun CurrencyTextField(
     keyboardOptions: KeyboardOptions,
     maxLines: Int,
     maxNoOfDecimal: Int,
-    currencySymbol: String,
+    currency: Currency,
 ) {
 
 }

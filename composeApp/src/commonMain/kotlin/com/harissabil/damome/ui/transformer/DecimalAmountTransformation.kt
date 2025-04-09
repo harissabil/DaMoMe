@@ -4,10 +4,11 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import com.harissabil.damome.core.utils.Currency
 import com.harissabil.damome.core.utils.formatCurrency
 
 class DecimalAmountTransformation(
-    private val currency: String,
+    private val currency: Currency,
 ) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val originalText = text.text

@@ -133,7 +133,7 @@ class DamommyChatViewModel(
                     """
                         Here is the retrieved context
                         --------------------------------------------------
-                        ${retrievedContext.map { it.toTransactionChatContext() }.joinToString("\n") { it.toString() }}
+                        ${retrievedContext.map { it.toTransactionChatContext() }.joinToString("\n") { it }}
                         --------------------------------------------------
                         Here is the user\'s query: ${userMessage.message}
                     """.trimIndent()

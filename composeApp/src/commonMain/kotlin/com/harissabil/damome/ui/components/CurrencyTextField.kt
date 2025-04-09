@@ -4,6 +4,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import com.harissabil.damome.core.utils.Currency
 
 @Composable
 expect fun CurrencyTextField(
@@ -15,5 +16,5 @@ expect fun CurrencyTextField(
         KeyboardOptions(keyboardType = KeyboardType.Number),
     maxLines: Int = 1,
     maxNoOfDecimal: Int = 2,
-    currencySymbol: String,
+    currency: Currency,
 )

@@ -11,7 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import com.harissabil.damome.core.utils.getLocaleFromCurrencySymbol
+import com.harissabil.damome.core.utils.Currency
+import com.harissabil.damome.core.utils.getLocaleFromCurrency
 import com.harissabil.damome.core.utils.sanitizeInput
 import top.yukonga.miuix.kmp.basic.TextField
 import java.text.DecimalFormat
@@ -30,7 +31,7 @@ actual fun CurrencyTextField(
     keyboardOptions: KeyboardOptions,
     maxLines: Int,
     maxNoOfDecimal: Int,
-    currencySymbol: String,
+    currency: Currency,
 ) {
     var textFieldState by remember(scannedAmount) {
         mutableStateOf(
@@ -40,7 +41,7 @@ actual fun CurrencyTextField(
         )
     }
 
-    val locale = getLocaleFromCurrencySymbol(currencySymbol)
+    val locale = getLocaleFromCurrency(currency)
 
     val decimalFormatter: DecimalFormat =
         (NumberFormat.getNumberInstance(Locale(locale.language, locale.region)) as DecimalFormat)

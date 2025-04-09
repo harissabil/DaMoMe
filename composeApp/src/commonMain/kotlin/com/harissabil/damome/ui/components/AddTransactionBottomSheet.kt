@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import com.harissabil.damome.core.theme.errorDark
 import com.harissabil.damome.core.theme.errorLight
 import com.harissabil.damome.core.theme.spacing
+import com.harissabil.damome.core.utils.Currency
 import com.harissabil.damome.core.utils.formatToLocalizedString
 import com.harissabil.damome.core.utils.toHhMm
 import com.harissabil.damome.core.utils.toYyyyMmDd
@@ -70,7 +70,7 @@ fun AddTransactionBottomSheet(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
-    currency: String,
+    currency: Currency,
     amount: Double,
     scannedAmount: Double?,
     onAmountChange: (String) -> Unit,
@@ -120,7 +120,7 @@ fun AddTransactionBottomSheet(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
             ) {
                 Text(
-                    text = currency,
+                    text = currency.symbol,
                     style = MiuixTheme.textStyles.headline2
                 )
                 Column(
@@ -157,7 +157,7 @@ fun AddTransactionBottomSheet(
                             ?: Modifier,
                         initialText = if (amount == 0.0) "" else formatToLocalizedString(amount, currency),
                         scannedAmount = scannedAmount?.let { formatToLocalizedString(it, currency) },
-                        currencySymbol = currency,
+                        currency = currency,
                         onChange = {
                             println("amount to be changed: $it")
                             onAmountChange(it)

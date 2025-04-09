@@ -33,6 +33,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.harissabil.damome.core.theme.errorDark
 import com.harissabil.damome.core.theme.errorLight
 import com.harissabil.damome.core.theme.spacing
+import com.harissabil.damome.core.utils.Currency
 import com.harissabil.damome.core.utils.formatCurrency
 import com.harissabil.damome.ui.components.AutoSizeText
 import com.harissabil.damome.ui.components.BaseCard
@@ -43,7 +44,7 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 @Composable
 fun IncomeExpenseWithFilter(
     modifier: Modifier = Modifier,
-    currency: String,
+    currency: Currency,
     totalIncome: Double,
     totalIncomeDaily: Double,
     totalIncomeWeekly: Double,
@@ -154,7 +155,7 @@ fun IncomeExpenseCard(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     title: String,
-    currency: String,
+    currency: Currency,
     amount: Double,
 ) {
     BaseCard(

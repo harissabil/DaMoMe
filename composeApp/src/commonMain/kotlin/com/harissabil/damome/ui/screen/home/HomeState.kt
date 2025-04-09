@@ -1,5 +1,6 @@
 package com.harissabil.damome.ui.screen.home
 
+import com.harissabil.damome.core.utils.Currency
 import com.harissabil.damome.domain.model.Transaction
 import com.harissabil.damome.domain.model.TransactionType
 import com.kizitonwose.calendar.core.now
@@ -8,8 +9,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 
 data class HomeState(
-    val currency: String = "",
-
+    val currency: Currency = Currency.EMPTY  ,
     val totalBalance: Double = 0.0,
     val totalIncome: Double = 0.0,
     val totalIncomeDaily: Double = 0.0,
@@ -32,7 +32,7 @@ data class TransactionToSubmitState(
     val type: TransactionType = TransactionType.INCOME,
     val timestamp: Instant = Clock.System.now(),
     val amount: Double? = 0.0,
-    val currency: String? = null,
+    val currency: Currency? = null ,
     val category: String? = null,
     val description: String? = null,
     val textToEmbed: String? = null,

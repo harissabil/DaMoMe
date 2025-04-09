@@ -2,9 +2,11 @@ package com.harissabil.damome.ui.screen.records
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.harissabil.damome.core.utils.Currency
 import com.harissabil.damome.core.utils.Result
 import com.harissabil.damome.core.utils.formatToTextToEmbed
 import com.harissabil.damome.core.utils.parseFormattedAmount
+import com.harissabil.damome.core.utils.toCurrency
 import com.harissabil.damome.domain.model.Category
 import com.harissabil.damome.domain.model.Transaction
 import com.harissabil.damome.domain.model.TransactionType
@@ -50,8 +52,8 @@ class RecordsViewModel(
         initialValue = emptyList()
     )
 
-    private val _currency = MutableStateFlow("")
-    val currency: StateFlow<String> = _currency.asStateFlow()
+    private val _currency = MutableStateFlow(Currency.EMPTY)
+    val currency: StateFlow<Currency> = _currency.asStateFlow()
 
     private val _transactionToSubmitState = MutableStateFlow(TransactionToSubmitState())
     val transactionToSubmitState: StateFlow<TransactionToSubmitState> =
@@ -77,7 +79,7 @@ class RecordsViewModel(
 
     private fun getCurrency() = viewModelScope.launch {
         currencyRepository.getCurrencyFlow().collect { currency ->
-            _currency.update { currency.first().currency }
+            _currency.update { currency.first().toCurrency() }
         }
     }
 
