@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.harissabil.damome.core.theme.spacing
+import com.harissabil.damome.core.utils.Currency
+import com.harissabil.damome.core.utils.getSymbolsList
 import com.harissabil.damome.ui.components.CustomSnackbarHost
 import com.harissabil.damome.ui.components.LargeDropdownMenu
 import com.harissabil.damome.ui.screen.onboarding.components.OnboardingCard
@@ -49,12 +51,7 @@ fun OnboardingScreen(
     val viewModel: OnboardingViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val currencies = listOf(
-        "IDR",
-        "AUD", "BRL", "CAD", "CHF", "CNY", "DKK", "EUR", "GBP", "HKD",
-        "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "RUB",
-        "SAR", "SEK", "SGD", "THB", "TRY", "USD", "VND", "ZAR"
-    )
+    val currencies = Currency.entries.getSymbolsList()
 
     val snackbarHostState = remember { SnackbarHostState() }
 

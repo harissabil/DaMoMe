@@ -2,54 +2,78 @@ package com.harissabil.damome.core.utils
 
 import androidx.compose.ui.text.intl.Locale
 
-expect fun formatCurrency(currency: String, value: Double): String
 
-fun getLocaleFromCurrencySymbol(currency: String): Locale {
-    return when (currency) {
-        "IDR" -> Locale(languageTag = "id-ID") // Indonesia
-        "USD" -> Locale(languageTag = "en-US") // United States
-        "EUR" -> Locale(languageTag = "de-DE") // Germany (default for Euro)
-        "JPY" -> Locale(languageTag = "ja-JP") // Japan
-        "KRW" -> Locale(languageTag = "ko-KR") // South Korea
-        "CNY" -> Locale(languageTag = "zh-CN") // China
-        "SGD" -> Locale(languageTag = "en-SG") // Singapore
-        "VND" -> Locale(languageTag = "vi-VN") // Vietnam
-        "DKK" -> Locale(languageTag = "da-DK") // Denmark
-        "AUD" -> Locale(languageTag = "en-AU") // Australia
-        "BRL" -> Locale(languageTag = "pt-BR") // Brazil
-        "CAD" -> Locale(languageTag = "en-CA") // Canada
-        "CHF" -> Locale(languageTag = "de-CH") // Switzerland
-        "GBP" -> Locale(languageTag = "en-GB") // United Kingdom
-        "HKD" -> Locale(languageTag = "zh-HK") // Hong Kong
-        "INR" -> Locale(languageTag = "hi-IN") // India
-        "MXN" -> Locale(languageTag = "es-MX") // Mexico
-        "MYR" -> Locale(languageTag = "ms-MY") // Malaysia
-        "NOK" -> Locale(languageTag = "nb-NO") // Norway
-        "NZD" -> Locale(languageTag = "en-NZ") // New Zealand
-        "PHP" -> Locale(languageTag = "fil-PH") // Philippines
-        "RUB" -> Locale(languageTag = "ru-RU") // Russia
-        "SAR" -> Locale(languageTag = "ar-SA") // Saudi Arabia
-        "SEK" -> Locale(languageTag = "sv-SE") // Sweden
-        "THB" -> Locale(languageTag = "th-TH") // Thailand
-        "TRY" -> Locale(languageTag = "tr-TR") // Turkey
-        "ZAR" -> Locale(languageTag = "en-ZA") // South Africa
-        else -> Locale.current // Default to current locale
+enum class  Currency(val symbol : String, val languageTag : String ){
+
+    IDR("IDR", "id-ID"), // Indonesia
+    USD("USD", "en-US"), // United States
+    EUR("EUR", "de-DE"), // Germany (default for Euro)
+    JPY("JPY", "ja-JP"), // Japan
+    KRW("KRW", "ko-KR"), // South Korea
+    CNY("CNY", "zh-CN"), // China
+    SGD("SGD", "en-SG"), // Singapore
+    VND("VND", "vi-VN"), // Vietnam
+    DKK("DKK", "da-DK"), // Denmark
+    AUD("AUD", "en-AU"), // Australia
+    BRL("BRL", "pt-BR"), // Brazil
+    CAD("CAD", "en-CA"), // Canada
+    CHF("CHF", "de-CH"), // Switzerland
+    GBP("GBP", "en-GB"), // United Kingdom
+    HKD("HKD", "zh-HK"), // Hong Kong
+    INR("INR", "hi-IN"), // India
+    MXN("MXN", "es-MX"), // Mexico
+    MYR("MYR", "ms-MY"), // Malaysia
+    NOK("NOK", "nb-NO"), // Norway
+    NZD("NZD", "en-NZ"), // New Zealand
+    PHP("PHP", "fil-PH"), // Philippines
+    RUB("RUB", "ru-RU"), // Russia
+    SAR("SAR", "ar-SA"), // Saudi Arabia
+    SEK("SEK", "sv-SE"), // Sweden
+    THB("THB", "th-TH"), // Thailand
+    TRY("TRY", "tr-TR"), // Turkey
+    ZAR("ZAR", "en-ZA"), // South Africa
+    DZD("DZD", "ar-DZ"), // Algeria ,
+    EMPTY("", ""),
+}
+
+fun List<Currency>.getSymbolsList(): List<String> {
+    return Currency.entries.mapNotNull {  innerCurrency ->
+        // cause the EMPTY currency is not a valid currency
+        innerCurrency.symbol.takeIf { it.isNotEmpty() }
     }
+}
+
+
+fun com.harissabil.damome.domain.model.Currency.toCurrency(): Currency {
+    var currency : Currency? = null
+    Currency.entries.forEach { innerCurrency ->
+        if (this.currency == innerCurrency.symbol) {
+           currency = innerCurrency
+        }
+    }
+    return currency ?: Currency.EMPTY
+}
+
+
+expect fun formatCurrency(currency: Currency, value: Double): String
+
+fun getLocaleFromCurrency(currency: Currency): Locale {
+    return Locale(languageTag = currency.languageTag)
 }
 
 
 /**
  * Converts a formatted currency string to a Double value based on the locale
  * @param amount The formatted currency string (e.g., "3.300.000,00" for IDR or "3,300,000.00" for USD)
- * @param currencySymbol The currency symbol to determine the locale
+ * @param currency The currency symbol to determine the locale
  * @return Double value of the amount or null if parsing fails
  */
-expect fun parseFormattedAmount(amount: String, currencySymbol: String): Double?
+expect fun parseFormattedAmount(amount: String, currency: Currency): Double?
 
 /**
  * Formats a double value to a localized currency string
  * @param amount The double value to format
- * @param currencySymbol The currency symbol to determine the locale
+ * @param currency The currency symbol to determine the locale
  * @return Formatted string according to the locale's currency format
  */
-expect fun formatToLocalizedString(amount: Double, currencySymbol: String): String
+expect fun formatToLocalizedString(amount: Double, currency: Currency): String

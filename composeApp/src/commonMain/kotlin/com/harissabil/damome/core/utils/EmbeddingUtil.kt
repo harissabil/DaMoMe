@@ -6,7 +6,7 @@ import com.harissabil.damome.domain.model.TransactionType
 fun formatToTextToEmbed(
     transactionType: TransactionType,
     amount: Double,
-    currency: String,
+    currency: Currency,
     category: Category,
     description: String,
 ): String {

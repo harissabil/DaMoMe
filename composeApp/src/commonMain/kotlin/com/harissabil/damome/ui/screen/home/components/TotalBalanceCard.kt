@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.harissabil.damome.core.theme.spacing
+import com.harissabil.damome.core.utils.Currency
 import com.harissabil.damome.core.utils.formatCurrency
 import com.harissabil.damome.ui.components.AutoSizeText
 import com.harissabil.damome.ui.components.BaseCard
@@ -19,7 +20,7 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 @Composable
 fun TotalBalanceCard(
     modifier: Modifier = Modifier,
-    currency: String,
+    currency: Currency,
     value: Double,
 ) {
     BaseCard(modifier = modifier.fillMaxWidth()) {

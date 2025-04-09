@@ -2,9 +2,11 @@ package com.harissabil.damome.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.harissabil.damome.core.utils.Currency
 import com.harissabil.damome.core.utils.Result
 import com.harissabil.damome.core.utils.formatToTextToEmbed
 import com.harissabil.damome.core.utils.parseFormattedAmount
+import com.harissabil.damome.core.utils.toCurrency
 import com.harissabil.damome.domain.model.Category
 import com.harissabil.damome.domain.model.Transaction
 import com.harissabil.damome.domain.model.TransactionType
@@ -77,7 +79,7 @@ class HomeViewModel(
 
     private fun getCurrency() = viewModelScope.launch {
         currencyRepository.getCurrencyFlow().collect { currencies ->
-            _state.update { it.copy(currency = currencies.firstOrNull()?.currency ?: "") }
+            _state.update { it.copy(currency = currencies.firstOrNull()?.toCurrency() ?: Currency.EMPTY ) }
         }
     }
 
