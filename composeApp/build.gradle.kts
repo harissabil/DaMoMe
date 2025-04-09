@@ -46,11 +46,12 @@ kotlin {
         }
     }
 
-    jvm("desktop") {
-        tasks.withType<org.jetbrains.kotlin.gradle.internal.KaptTask> {
-            enabled = false
-        }
-    }
+    jvm("desktop")
+//    {
+//        tasks.withType<org.jetbrains.kotlin.gradle.internal.KaptTask> {
+//            enabled = false
+//        }
+//    }
 
     cocoapods {
         summary = "Some description for the Shared Module"
